@@ -1,7 +1,6 @@
 package org.openstack4j.openstack.networking.internal;
 
 import org.openstack4j.api.Apis;
-import org.openstack4j.api.networking.AvailabilityZoneService;
 import org.openstack4j.api.networking.NetFloatingIPService;
 import org.openstack4j.api.networking.NetworkService;
 import org.openstack4j.api.networking.NetworkingService;
@@ -118,13 +117,5 @@ public class NetworkingServiceImpl implements NetworkingService {
     public AgentService agent() {
         return Apis.get(AgentService.class);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public AvailabilityZoneService availabilityzone() {
-        return Apis.get(AvailabilityZoneService.class);
-    }	
 
 }

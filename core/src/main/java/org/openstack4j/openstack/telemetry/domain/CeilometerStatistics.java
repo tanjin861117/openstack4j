@@ -3,15 +3,13 @@ package org.openstack4j.openstack.telemetry.domain;
 import java.util.Date;
 
 import org.openstack4j.model.telemetry.Statistics;
-import org.openstack4j.openstack.common.TelemetryDateDeserializer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
  * Computed Statistics for a Query against a Meter
- *
+ * 
  * @author Jeremy Unruh
  */
 public class CeilometerStatistics implements Statistics {
@@ -24,12 +22,10 @@ public class CeilometerStatistics implements Statistics {
 
 	private Double duration;
 
-   @JsonDeserialize(using = TelemetryDateDeserializer.class)
 	@JsonProperty("duration_start")
 	private Date durationStart;
-	
-   @JsonDeserialize(using = TelemetryDateDeserializer.class)
-   @JsonProperty("duration_end")
+
+	@JsonProperty("duration_end")
 	private Date durationEnd;
 
 	private Double max;
@@ -38,20 +34,18 @@ public class CeilometerStatistics implements Statistics {
 
 	private Integer period;
 
-   @JsonDeserialize(using = TelemetryDateDeserializer.class)
-   @JsonProperty("period_start")
-   private Date periodStart;
+	@JsonProperty("period_start")
+	private Date periodStart;
 
-   @JsonDeserialize(using = TelemetryDateDeserializer.class)
-   @JsonProperty("period_end")
+	@JsonProperty("period_end")
 	private Date periodEnd;
 
 	private Double sum;
-
+	
 	private String unit;
-
-   private String groupby;
-
+	
+	private String groupby;
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -89,12 +83,12 @@ public class CeilometerStatistics implements Statistics {
 	 */
 	@Override
 	public Date getDurationEnd() {
-      return durationEnd;
+		return durationEnd;
 	}
 
-   /**
-    * {@inheritDoc}
-    */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Double getMax() {
 		return max;
@@ -129,7 +123,7 @@ public class CeilometerStatistics implements Statistics {
 	 */
 	@Override
 	public Date getPeriodStart() {
-      return periodStart;
+		return periodStart;
 	}
 
 	/**
@@ -147,26 +141,26 @@ public class CeilometerStatistics implements Statistics {
 	public String getUnit() {
 		return unit;
 	}
-
+	
   /**
    * {@inheritDoc}
    */
   @Override
-   public String getGroupBy() {
-      return groupby;
+  public String getGroupBy() {
+    return groupby;
   }
-
-   /**
-    * {@inheritDoc}
-    */
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).omitNullValues()
+		return Objects.toStringHelper(this).omitNullValues()
 				    .add("avg", avg).add("count", count).add("duration", duration)
 				    .add("durationStart", durationStart).add("durationEnd", durationEnd)
 				    .add("min", min).add("max", max).add("sum", sum).add("period", period)
 				    .add("periodStart", periodStart).add("periodEnd", periodEnd).add("unit", unit)
-				    .add("groupby", groupby)
+				    .add("groupBy", groupby)
 				    .toString();
 	}
 

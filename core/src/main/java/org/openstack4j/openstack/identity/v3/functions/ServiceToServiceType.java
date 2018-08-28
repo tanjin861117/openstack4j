@@ -17,10 +17,7 @@ public class ServiceToServiceType implements Function<Service, ServiceType> {
 	 */
 	@Override
 	public ServiceType apply(Service input) {
-                ServiceType serviceType = ServiceType.forName(input.getType());
-                if (serviceType == ServiceType.UNKNOWN)
-                   serviceType = ServiceType.forName(input.getName());
-		return serviceType;
+		return ServiceType.forName(input.getType());
 	}
 
 }

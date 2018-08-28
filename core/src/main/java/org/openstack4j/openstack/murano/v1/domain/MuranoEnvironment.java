@@ -1,7 +1,7 @@
 package org.openstack4j.openstack.murano.v1.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import org.openstack4j.model.murano.v1.builder.EnvironmentBuilder;
 import org.openstack4j.model.murano.v1.domain.Application;
 import org.openstack4j.model.murano.v1.domain.Environment;
@@ -104,7 +104,7 @@ public class MuranoEnvironment implements Environment {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
+        return Objects.toStringHelper(this).omitNullValues()
                 .add("id", this.id)
                 .add("name", this.name)
                 .add("status", this.status)

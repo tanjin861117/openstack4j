@@ -1,73 +1,57 @@
-package org.openstack4j.openstack.storage.block.domain;
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
 
-import org.openstack4j.model.storage.block.VolumeAttachment;
+package org.openstack4j.openstack.storage.block.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+import org.openstack4j.model.storage.block.VolumeAttachment;
 
-/**
- * return a description for this volume attachment job
- *
- * @author Octopus Zhang
- */
 @JsonRootName("volumeAttachment")
 public class CinderVolumeAttachment implements VolumeAttachment {
+    private static final long serialVersionUID = 1L;
+    @JsonProperty
+    private String device;
+    @JsonProperty
+    private String host_name;
+    @JsonProperty
+    private String id;
+    @JsonProperty
+    private String server_id;
+    @JsonProperty
+    private String volume_id;
 
-	private static final long serialVersionUID = 1L;
+    public CinderVolumeAttachment() {
+    }
 
-	@JsonProperty
-	private String device;
+    public String getDevice() {
+        return this.device;
+    }
 
-	@JsonProperty
-	private String host_name;
+    public String getHostname() {
+        return this.host_name;
+    }
 
-	@JsonProperty
-	private String id;
+    public void setHostname(String hostName) {
+        this.host_name = hostName;
+    }
 
-	@JsonProperty
-	private String server_id;
-	
-	@JsonProperty
-	private String attachment_id;
+    public String getId() {
+        return this.id;
+    }
 
-	@JsonProperty
-	private String volume_id;
+    public String getServerId() {
+        return this.server_id;
+    }
 
-	@Override
-	public String getDevice() {
-		return device;
-	}
+    public String getVolumeId() {
+        return this.volume_id;
+    }
 
-	@Override
-	public String getHostname() {
-		return host_name;
-	}
-
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public String getServerId() {
-		return server_id;
-
-	}
-
-	@Override
-	public String getVolumeId() {
-		return volume_id;
-	}
-
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).omitNullValues()
-				.add("device", device).add("id", id).add("serverId", server_id)
-				.add("volumeId", volume_id).add("hostname", host_name).toString();
-
-	}
-
-
-
+    public String toString() {
+        return Objects.toStringHelper(this).omitNullValues().add("device", this.device).add("id", this.id).add("serverId", this.server_id).add("volumeId", this.volume_id).add("hostname", this.host_name).toString();
+    }
 }

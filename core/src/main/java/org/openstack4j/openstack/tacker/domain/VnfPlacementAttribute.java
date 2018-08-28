@@ -3,7 +3,7 @@ package org.openstack4j.openstack.tacker.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
  *
@@ -13,13 +13,13 @@ import com.google.common.base.MoreObjects;
 @JsonRootName("placement_attr")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VnfPlacementAttribute {
-
+	
 	@JsonProperty("vim_name")
 	private String vimName;
-
+	
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).omitNullValues()
+		return Objects.toStringHelper(this).omitNullValues()
 				.add("vimName", vimName)
 				.toString();
 	}

@@ -5,10 +5,12 @@ import org.openstack4j.api.heat.StackService;
 import org.openstack4j.model.common.ActionResponse;
 import org.openstack4j.model.heat.Stack;
 import org.openstack4j.model.heat.StackCreate;
+import org.openstack4j.model.heat.StackOutput;
 import org.openstack4j.model.heat.StackUpdate;
 import org.openstack4j.openstack.compute.functions.ToActionResponseFunction;
 import org.openstack4j.openstack.heat.domain.HeatStack;
 import org.openstack4j.openstack.heat.domain.HeatStack.Stacks;
+import org.openstack4j.openstack.heat.domain.HeatStackOutput.StackOutputs;
 
 import java.util.List;
 import java.util.Map;
@@ -19,9 +21,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * This class implements all methods for manipulation of {@link HeatStack} objects. The
  * non-exhaustive list of methods is oriented along
  * http://developer.openstack.org/api-ref-orchestration-v1.html#stacks
- * 
+ *
  * @author Matthias Reisser
- * 
  */
 public class StackServiceImpl extends BaseHeatServices implements StackService {
 
@@ -33,8 +34,8 @@ public class StackServiceImpl extends BaseHeatServices implements StackService {
 
     @Override
     public Stack create(String name, String template,
-            Map<String, String> parameters, boolean disableRollback,
-            Long timeoutMins) {
+                        Map<String, String> parameters, boolean disableRollback,
+                        Long timeoutMins) {
         checkNotNull(name);
         checkNotNull(template);
         checkNotNull(parameters);
@@ -47,6 +48,11 @@ public class StackServiceImpl extends BaseHeatServices implements StackService {
     @Override
     public List<? extends Stack> list() {
         return get(Stacks.class, uri("/stacks")).execute().getList();
+    }
+
+    @Override
+    public List<? extends StackOutput> listOutput(String stackName, String stackId) {
+        return get(StackOutputs.class, uri("/stacks/%s/%s/outputs", stackName, stackId)).execute().getList();
     }
 
     @Override

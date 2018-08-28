@@ -4,11 +4,11 @@ import org.openstack4j.model.sahara.DataSourceCredentials;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
  * For mapping JSON response to/from java objects
- *
+ * 
  * @author ekasit.kijsipongse@nectec.or.th
  * @author siwat.pru@outlook.com
  */
@@ -44,7 +44,7 @@ public class SaharaDataSourceCredentials implements DataSourceCredentials {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
+        return Objects.toStringHelper(this).omitNullValues()
                    .add("password", password)
                    .add("user", user)
                    .toString();

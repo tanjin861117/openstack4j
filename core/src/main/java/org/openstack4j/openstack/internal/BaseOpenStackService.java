@@ -112,12 +112,7 @@ public class BaseOpenStackService {
         }
         RequestBuilder<R> req = HttpRequest.builder(returnType).endpointTokenProvider(ses).config(ses.getConfig())
                 .method(method).path(path);
-        Map headers = ses.getHeaders();
-        if (headers != null && headers.size() > 0){
-            return new Invocation<R>(req, serviceType, endpointFunc).headers(headers);
-        }else{ 
-            return new Invocation<R>(req, serviceType, endpointFunc);
-        }
+        return new Invocation<R>(req, serviceType, endpointFunc);
     }
 
     protected static class Invocation<R> {

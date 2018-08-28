@@ -40,10 +40,4 @@ public interface Router extends Resource, Buildable<RouterBuilder> {
 	 * @return the external gateway info
 	 */
 	ExternalGateway getExternalGatewayInfo();
-	
-	/**
-	 * true indicates a distributed router. It is available when dvr extension is enabled.
-	 * @return
-	 */
-	Boolean getDistributed();
 }

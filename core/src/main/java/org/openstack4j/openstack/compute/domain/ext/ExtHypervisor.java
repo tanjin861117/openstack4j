@@ -3,8 +3,7 @@ package org.openstack4j.openstack.compute.domain.ext;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
-
+import com.google.common.base.Objects;
 import org.openstack4j.core.transport.ObjectMapperSingleton;
 import org.openstack4j.model.compute.ext.Hypervisor;
 import org.openstack4j.openstack.common.ListResult;
@@ -52,17 +51,10 @@ public class ExtHypervisor implements Hypervisor {
 
     @JsonProperty("cpu_info")
     private HypervisorCPUInfo cpuInfo;
-    /**
-     * The status of the hypervisor. One of enabled or disabled.
-     * Author:Wang Ting/王婷
-     */
+
     private String status;
 
-    /**
-     * The state of the hypervisor. One of up or down
-     * Author:Wang Ting/王婷
-     */
-    private String state;
+    private String binary;
 
     @Override
     public String getId() {
@@ -155,27 +147,31 @@ public class ExtHypervisor implements Hypervisor {
         return cpuInfo;
     }
 
-    @Override
     public String getStatus() {
         return status;
     }
 
-    @Override
-    public String getState() {
-        return state;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getBinary() {
+        return binary;
+    }
+
+    public void setBinary(String binary) {
+        this.binary = binary;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
+        return Objects.toStringHelper(this).omitNullValues()
                 .add("id", id).add("hypervisor_hostname", hypervisorHostname).add("version", version).add("type", type)
                 .add("host_ip", hostIP).add("running", runningVM).add("freeDisk", freeDisk).add("freeRam", freeRam)
                 .add("vcpus", virtualCPU).add("usedVcpu", virtualUsedCPU).add("localDisk", localDisk).add("localDiskUsed", localDiskUsed)
                 .add("localMemory", localMemory).add("localMemoryUsed", localMemoryUsed).add("currentWorkload", currentWorkload)
                 .add("leastDiskAvail", leastDiskAvailable).add("running_vms", runningVM).add("service", service)
                 .add("cpuInfo", cpuInfo)
-                .add("status", status)
-                .add("state", state)
                 .toString();
     }
 
@@ -198,7 +194,7 @@ public class ExtHypervisor implements Hypervisor {
 
         @Override
         public String toString() {
-            return MoreObjects.toStringHelper(this).omitNullValues().add("id", id).add("host", host).toString();
+            return Objects.toStringHelper(this).omitNullValues().add("id", id).add("host", host).toString();
         }
     }
 
@@ -220,8 +216,8 @@ public class ExtHypervisor implements Hypervisor {
 
         private static final long serialVersionUID = 1L;
 
-        private List<Object> vendor;
-        private List<Object> model;
+        private String vendor;
+        private String model;
         private String arch;
         private List<String> features;
         private HypervisorCPUTopology topology;
@@ -240,12 +236,12 @@ public class ExtHypervisor implements Hypervisor {
         }
 
         @Override
-        public List<Object> getVendor() {
+        public String getVendor() {
             return vendor;
         }
 
         @Override
-        public List<Object> getModel() {
+        public String getModel() {
             return model;
         }
 
@@ -266,7 +262,7 @@ public class ExtHypervisor implements Hypervisor {
 
         @Override
         public String toString() {
-            return MoreObjects.toStringHelper(this).omitNullValues().add("vendor", vendor)
+            return Objects.toStringHelper(this).omitNullValues().add("vendor", vendor)
                     .add("model", model)
                     .add("arch", arch)
                     .add("features", features)
@@ -301,7 +297,7 @@ public class ExtHypervisor implements Hypervisor {
 
         @Override
         public String toString() {
-            return MoreObjects.toStringHelper(this).omitNullValues().add("cores", cores)
+            return Objects.toStringHelper(this).omitNullValues().add("cores", cores)
                     .add("threads", threads)
                     .add("sockets", sockets)
                     .toString();

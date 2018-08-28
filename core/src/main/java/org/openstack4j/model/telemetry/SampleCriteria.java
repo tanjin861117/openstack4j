@@ -1,14 +1,12 @@
 package org.openstack4j.model.telemetry;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.collect.Lists;
+import org.openstack4j.openstack.internal.Parser;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.openstack4j.openstack.internal.Parser;
-
-import com.google.common.base.Preconditions;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Query options used in retreiving Samples
@@ -39,10 +37,8 @@ public class SampleCriteria {
         }
     }
     
-    private List<NameOpValue> params = new ArrayList<>();
+    private List<NameOpValue> params = Lists.newArrayList();
     
-    private int limit;
-
     public static SampleCriteria create() {
         return new SampleCriteria();
     }
@@ -110,12 +106,6 @@ public class SampleCriteria {
         return this;
     }
     
-    public SampleCriteria limit(int limit) {
-        Preconditions.checkArgument(limit > 0, "Limit must be greater than zero");
-        this.limit = limit;
-        return this;
-    }
-
     /**
      * @return the criteria parameters for this query
      */
@@ -123,10 +113,6 @@ public class SampleCriteria {
         return params;
     }
     
-    public int getLimit() {
-        return limit;
-    }
-
     public static class NameOpValue {
         private final String field;
         private final Oper operator;
@@ -135,11 +121,10 @@ public class SampleCriteria {
         NameOpValue(String field, Oper operator, Comparable<?> value) {
             this.field = field;
             this.operator = operator;
-            if (value instanceof Date) {
-               this.value = Parser.toISO8601DateFormat(Date.class.cast(value));
-            } else {
-               this.value = String.valueOf(value);
-            }
+            if (value instanceof Date) 
+                this.value = Parser.toISO8601DateFormat(Date.class.cast(value));
+            else
+                this.value = String.valueOf(value);
         }
         
         public String getField() {

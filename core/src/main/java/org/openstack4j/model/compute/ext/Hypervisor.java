@@ -136,21 +136,13 @@ public interface Hypervisor extends ModelEntity {
      */
     CPUInfo getCPUInfo();
 
-    /**
-     * <br/>Description:Gets the host status
-     * <p>Author:Wang Ting/王婷</p>
-     *
-     * @return the host status
-     */
     String getStatus();
 
-    /**
-     * Gets the host state
-     * <p>Author:Wang Ting/王婷</p>
-     *
-     * @return the host state
-     */
-    String getState();
+    void setStatus(String status);
+
+    String getBinary();
+
+    void setBinary(String binary);
 
     /**
      * The Hypervisor Services Detail
@@ -178,12 +170,12 @@ public interface Hypervisor extends ModelEntity {
         /**
          * @return cpu vendor
          */
-        List<Object> getVendor();
+        String getVendor();
 
         /**
          * @return cpu model
          */
-        List<Object> getModel();
+        String getModel();
 
         /**
          * @return chipset architecture
@@ -200,6 +192,7 @@ public interface Hypervisor extends ModelEntity {
          * @return cpu topology
          */
         CPUTopology getTopology();
+
     }
 
     public interface CPUTopology extends ModelEntity {

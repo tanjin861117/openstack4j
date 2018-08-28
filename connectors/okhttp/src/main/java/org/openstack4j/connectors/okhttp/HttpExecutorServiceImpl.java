@@ -29,11 +29,12 @@ public class HttpExecutorServiceImpl implements HttpExecutorService {
         try {
             return invoke(request);
         }
-        catch (RuntimeException e) {
-            throw e;
+        catch (ResponseException re) {
+            throw re;
         }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return null;
         }
     }
 

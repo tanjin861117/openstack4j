@@ -1,12 +1,11 @@
 package org.openstack4j.openstack.networking.domain;
 
-import org.openstack4j.model.network.NetworkUpdate;
-import org.openstack4j.model.network.builder.NetworkUpdateBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+import org.openstack4j.model.network.NetworkUpdate;
+import org.openstack4j.model.network.builder.NetworkUpdateBuilder;
 
 /**
  * An entity used to update a network
@@ -24,6 +23,8 @@ public class NeutronNetworkUpdate implements NetworkUpdate {
     private Boolean shared;
     @JsonProperty("admin_state_up")
     private Boolean adminStateUp;
+    @JsonProperty("router:external")
+    private Boolean routerExternal;
 
     public static NetworkUpdateBuilder builder() {
         return new NetworkUpdateConcreteBuilder();
@@ -51,11 +52,17 @@ public class NeutronNetworkUpdate implements NetworkUpdate {
         return shared == null ? false : shared;
     }
 
+    @JsonIgnore
+    @Override
+    public boolean isRouterExternal() {
+        return routerExternal == null ? false : routerExternal;
+    }
+
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
-                  .add("name", name).add("adminStateUp", adminStateUp).add("shared", shared)
-                  .toString();
+        return Objects.toStringHelper(this).omitNullValues()
+                .add("name", name).add("adminStateUp", adminStateUp).add("shared", shared)
+                .toString();
     }
 
     public static class NetworkUpdateConcreteBuilder implements NetworkUpdateBuilder {
@@ -99,5 +106,10 @@ public class NeutronNetworkUpdate implements NetworkUpdate {
             return this;
         }
 
+        @Override
+        public NetworkUpdateBuilder routerExternal(boolean routerExternal) {
+            model.routerExternal = routerExternal;
+            return this;
+        }
     }
 }

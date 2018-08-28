@@ -1,28 +1,27 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
 package org.openstack4j.openstack.identity.v3.domain;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.*;
+import com.google.common.base.Objects;
 import org.openstack4j.model.identity.v3.Domain;
 import org.openstack4j.model.identity.v3.Project;
 import org.openstack4j.model.identity.v3.builder.ProjectBuilder;
 import org.openstack4j.openstack.common.ListResult;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-/**
- * Project model class for identity/v3
- *
- * @see <a href="http://developer.openstack.org/api-ref-identity-v3.html#projects-v3">API reference</a>
- */
 @JsonRootName("project")
-/** If we don't explicitly set extra as an ignore property, it will methods with @JsonAnyGetter/Setter will not work **/
-@JsonIgnoreProperties(value = "extra" , ignoreUnknown = true)
+@JsonIgnoreProperties(
+        value = {"extra"},
+        ignoreUnknown = true
+)
 public class KeystoneProject implements Project {
-
     private static final long serialVersionUID = 1L;
     @JsonProperty
     private String id;
@@ -40,199 +39,137 @@ public class KeystoneProject implements Project {
     private String subtree;
     private String parents;
     private Boolean enabled = true;
-    private Map<String, String> extra = new HashMap<String, String>();
+    @JsonProperty
+    private List tags;
+    private Map<String, String> extra = new HashMap();
 
-    /**
-     * @return the Project builder
-     */
+    public KeystoneProject() {
+    }
+
     public static ProjectBuilder builder() {
-        return new ProjectConcreteBuilder();
+        return new KeystoneProject.ProjectConcreteBuilder();
     }
 
-    @Override
     public ProjectBuilder toBuilder() {
-        return new ProjectConcreteBuilder(this);
+        return new KeystoneProject.ProjectConcreteBuilder(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
+    public List getTags() {
+        return tags;
+    }
+
+    public void setTags(List tags) {
+        this.tags = tags;
+    }
+
     public String getId() {
-        return id;
+        return this.id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Domain getDomain() {
-        return domain;
+        return this.domain;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getDomainId() {
-        if (domainId == null && domain != null && domain.getId() != null)
-            domainId = domain.getId();
-        return domainId;
+        if (this.domainId == null && this.domain != null && this.domain.getId() != null) {
+            this.domainId = this.domain.getId();
+        }
+
+        return this.domainId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @JsonIgnore
-    @Override
     public Map<String, String> getLinks() {
-        return links;
+        return this.links;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @JsonProperty("links")
     public void setLinks(Map<String, String> links) {
         this.links = links;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getParentId() {
-        return parentId;
+        return this.parentId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getSubtree() {
-        return subtree;
+        return this.subtree;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getParents() {
-        return parents;
+        return this.parents;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean isEnabled() {
-        return (enabled != null && enabled);
+        return this.enabled != null && this.enabled;
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getExtra(String key) {
-        return extra.get(key);
-    }
-
-    @JsonAnyGetter
-    public Map<String, String> getExtra() {
-        return extra;
-    }
-
-    @JsonAnySetter
-    public void setExtra(String key, String value) {
-        // is_domain is not necessary
-        // if we don't ignore this, this will be set into extra field.
-        if (Objects.equal(key, "is_domain")) {
-            return;
-        }
-        extra.put(key, value);
-    }
-
-    /**
-     * set project enabled
-     *
-     * @param enabled
-     *            the new enabled status
-     */
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
+    public String getExtra(String key) {
+        return (String) this.extra.get(key);
+    }
+
+    @JsonAnyGetter
+    public Map<String, String> getExtra() {
+        return this.extra;
+    }
+
+    @JsonAnySetter
+    public void setExtra(String key, String value) {
+        if (!Objects.equal(key, "is_domain")) {
+            this.extra.put(key, value);
+        }
+    }
+
     public String toString() {
         String domainId = null;
-        if (domain != null) {
-            domainId = domain.getId();
+        if (this.domain != null) {
+            domainId = this.domain.getId();
         }
 
-        return MoreObjects.toStringHelper(this)
-                .add("id", id)
-                .add("domainId", domainId)
-                .add("description", description)
-                .add("name", name)
-                .add("links", links)
-                .add("parentId", parentId)
-                .add("subtree", subtree)
-                .add("parents", parents)
-                .add("enabled", enabled)
-                .omitNullValues()
-                .toString();
+        return Objects.toStringHelper(this).add("id", this.id).add("domainId", domainId).add("description", this.description).add("name", this.name).add("links", this.links).add("parentId", this.parentId).add("subtree", this.subtree).add("parents", this.parents).add("enabled", this.enabled).omitNullValues().toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public int hashCode() {
-        return Objects.hashCode(id, domain != null ? domain.getId() : domainId, description, name, links, parentId, subtree, parents);
+        return Objects.hashCode(new Object[]{this.id, this.domain != null ? this.domain.getId() : this.domainId, this.description, this.name, this.links, this.parentId, this.subtree, this.parents});
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null || getClass() != obj.getClass())
+        } else if (obj != null && this.getClass() == obj.getClass()) {
+            KeystoneProject that = (KeystoneProject) KeystoneProject.class.cast(obj);
+            return Objects.equal(this.id, that.id) && Objects.equal(this.domain, that.domain) && Objects.equal(this.description, that.description) && Objects.equal(this.name, that.name) && Objects.equal(this.links, that.links) && Objects.equal(this.parentId, that.parentId) && Objects.equal(this.subtree, that.subtree) && Objects.equal(this.parents, that.parents) && Objects.equal(this.enabled, that.enabled);
+        } else {
             return false;
-        KeystoneProject that = KeystoneProject.class.cast(obj);
-        return Objects.equal(this.id, that.id)
-                && Objects.equal(this.domain, that.domain)
-                && Objects.equal(this.description, that.description)
-                && Objects.equal(this.name, that.name)
-                && Objects.equal(this.links, that.links)
-                && Objects.equal(this.parentId, that.parentId)
-                && Objects.equal(this.subtree, that.subtree)
-                && Objects.equal(this.parents, that.parents)
-                && Objects.equal(this.enabled, that.enabled);
+        }
+    }
+
+    public static class Projects extends ListResult<KeystoneProject> {
+        private static final long serialVersionUID = 1L;
+        @JsonProperty("projects")
+        protected List<KeystoneProject> list;
+
+        public Projects() {
+        }
+
+        public List<KeystoneProject> value() {
+            return this.list;
+        }
     }
 
     public static class ProjectConcreteBuilder implements ProjectBuilder {
-
         KeystoneProject model;
 
         ProjectConcreteBuilder() {
@@ -243,134 +180,74 @@ public class KeystoneProject implements Project {
             this.model = model;
         }
 
-        /**
-         * @see KeystoneProject#getId()
-         */
-        @Override
         public ProjectBuilder id(String id) {
-            model.id = id;
+            this.model.id = id;
             return this;
         }
 
-        /**
-         * @see KeystoneProject#getDomainId()
-         */
-        @Override
         public ProjectBuilder domain(Domain domain) {
-            if (domain != null && domain.getId() != null)
-                model.domainId = domain.getId();
+            if (domain != null && domain.getId() != null) {
+                this.model.domainId = domain.getId();
+            }
+
             return this;
         }
 
-        /**
-         * @see KeystoneProject#getDescription()
-         */
-        @Override
         public ProjectBuilder description(String description) {
-            model.description = description;
+            this.model.description = description;
             return this;
         }
 
-        /**
-         * @see KeystoneProject#getName()
-         */
-        @Override
         public ProjectBuilder name(String name) {
-            model.name = name;
+            this.model.name = name;
             return this;
         }
 
-        /**
-         * @see KeystoneProject#getLinks()
-         */
-        @Override
         public ProjectBuilder links(Map<String, String> links) {
-            model.links = links;
+            this.model.links = links;
             return this;
         }
 
-        /**
-         * @see KeystoneProject#getParentId()
-         */
-        @Override
         public ProjectBuilder parentId(String parentId) {
-            model.parentId = parentId;
+            this.model.parentId = parentId;
             return this;
         }
 
-        /**
-         * @see KeystoneProject#getSubtree()
-         */
-        @Override
         public ProjectBuilder subtree(String subtree) {
-            model.subtree = subtree;
+            this.model.subtree = subtree;
             return this;
         }
 
-        /**
-         * @see KeystoneProject#getParents()
-         */
-        @Override
         public ProjectBuilder parents(String parents) {
-            model.parents = parents;
+            this.model.parents = parents;
             return this;
         }
 
-
-        /**
-         * @see KeystoneProject#setExtra(String, String)
-         */
-        @Override
         public ProjectBuilder setExtra(String key, String value) {
-            model.extra.put(key, value);
+            this.model.extra.put(key, value);
             return this;
         }
 
-        /**
-         * @see KeystoneProject#isEnabled()
-         */
-        @Override
         public ProjectBuilder enabled(boolean enabled) {
-            model.enabled = enabled;
+            this.model.enabled = enabled;
             return this;
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
         public Project build() {
-            return model;
+            return this.model;
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
         public ProjectBuilder from(Project in) {
-            if (in != null)
+            if (in != null) {
                 this.model = (KeystoneProject) in;
+            }
+
             return this;
         }
 
-        @Override
         public ProjectBuilder domainId(String domainId) {
-            model.domainId = domainId;
+            this.model.domainId = domainId;
             return this;
         }
-
     }
-
-    public static class Projects extends ListResult<KeystoneProject> {
-
-        private static final long serialVersionUID = 1L;
-        @JsonProperty("projects")
-        protected List<KeystoneProject> list;
-
-        @Override
-        public List<KeystoneProject> value() {
-            return list;
-        }
-    }
-
 }

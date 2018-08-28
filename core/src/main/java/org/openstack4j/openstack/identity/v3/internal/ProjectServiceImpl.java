@@ -1,10 +1,5 @@
 package org.openstack4j.openstack.identity.v3.internal;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.openstack4j.core.transport.ClientConstants.PATH_PROJECTS;
-
-import java.util.List;
-
 import org.openstack4j.api.identity.v3.ProjectService;
 import org.openstack4j.model.common.ActionResponse;
 import org.openstack4j.model.identity.v3.Project;
@@ -12,13 +7,19 @@ import org.openstack4j.openstack.identity.v3.domain.KeystoneProject;
 import org.openstack4j.openstack.identity.v3.domain.KeystoneProject.Projects;
 import org.openstack4j.openstack.internal.BaseOpenStackService;
 
-public class ProjectServiceImpl extends BaseOpenStackService implements ProjectService  {
+import java.util.List;
+import java.util.Map;
 
-	@Override
-	public Project create(Project project) {
-		checkNotNull(project);
-		return post(KeystoneProject.class, PATH_PROJECTS).entity(project).execute();
-	}
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.openstack4j.core.transport.ClientConstants.PATH_PROJECTS;
+
+public class ProjectServiceImpl extends BaseOpenStackService implements ProjectService {
+
+    @Override
+    public Project create(Project project) {
+        checkNotNull(project);
+        return post(KeystoneProject.class, PATH_PROJECTS).entity(project).execute();
+    }
 
     @Override
     public Project create(String domainId, String name, String description, boolean enabled) {
@@ -65,4 +66,21 @@ public class ProjectServiceImpl extends BaseOpenStackService implements ProjectS
         return get(Projects.class, uri(PATH_PROJECTS)).execute().getList();
     }
 
+    public List<? extends Project> list(Map<String, String> filterMap) {
+        Invocation<Projects> imageInvocation = buildInvocation(filterMap);
+        return imageInvocation.execute().getList();
+    }
+
+    private Invocation<Projects> buildInvocation(Map<String, String> filteringParams) {
+        Invocation<Projects> imageInvocation = get(Projects.class, uri(PATH_PROJECTS));
+        if (filteringParams == null) {
+            return imageInvocation;
+        }
+        if (filteringParams != null) {
+            for (Map.Entry<String, String> entry : filteringParams.entrySet()) {
+                imageInvocation = imageInvocation.param(entry.getKey(), entry.getValue());
+            }
+        }
+        return imageInvocation;
+    }
 }

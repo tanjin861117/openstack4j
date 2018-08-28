@@ -50,9 +50,4 @@ public interface NetworkBuilder extends Builder<NetworkBuilder, Network> {
 	 * @see Network#isRouterExternal()
 	 */
 	NetworkBuilder isRouterExternal(boolean routerExternal);
-	
-	/**
-	 * @see Network#getAvailabilityZoneHints()
-	 */
-	NetworkBuilder addAvailabilityZoneHints(String availabilityZone);
 }

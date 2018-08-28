@@ -7,13 +7,13 @@ import org.openstack4j.model.compute.Limits;
 import org.openstack4j.model.compute.RateLimit;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
- * Accounts may be pre-configured with a set of thresholds (or limits) to manage capacity and prevent abuse of the system.
- * The system recognizes two kinds of limits: rate limits and absolute limits. Rate limits are thresholds that are reset after a
+ * Accounts may be pre-configured with a set of thresholds (or limits) to manage capacity and prevent abuse of the system. 
+ * The system recognizes two kinds of limits: rate limits and absolute limits. Rate limits are thresholds that are reset after a 
  * certain amount of time passes. Absolute limits are fixed.
- *
+ * 
  * @author Jeremy Unruh
  * @see http://docs.openstack.org/api/openstack-compute/2/content/Limits-d1e846.html
  */
@@ -45,9 +45,9 @@ public class NovaLimits implements Limits {
 	 */
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).omitNullValues()
+		return Objects.toStringHelper(this).omitNullValues()
 				    .add("rate", rate).add("absolute", absolute)
 				    .toString();
 	}
-
+	
 }

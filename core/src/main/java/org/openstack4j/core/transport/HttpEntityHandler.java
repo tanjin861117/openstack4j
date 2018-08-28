@@ -60,7 +60,7 @@ public class HttpEntityHandler {
             }
 
             if (returnType == ActionResponse.class) {
-                return (T) ActionResponse.actionSuccess(response.getStatus());
+                return (T) ActionResponse.actionSuccess();
             }
 
             return response.readEntity(returnType);

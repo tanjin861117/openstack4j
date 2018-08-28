@@ -1,9 +1,9 @@
 package org.openstack4j.openstack.compute.domain.actions;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+
+import java.util.Map;
 
 /**
  * 
@@ -27,18 +27,15 @@ public class CreateSnapshotAction implements ServerAction {
     public CreateSnapshotAction(String name) {
         this.name = name;
     }
-
     public CreateSnapshotAction(String name, Map<String, String> metadata) {
         this.name = name;
         this.metadata = metadata;
     }
-    
     public static CreateSnapshotAction create(String name) {
         return new CreateSnapshotAction(name);
     }
-
     public static CreateSnapshotAction create(String name, Map<String, String> metadata) {
-        return new CreateSnapshotAction(name, metadata);
+        return new CreateSnapshotAction(name,metadata);
     }
 
     public String getName() {

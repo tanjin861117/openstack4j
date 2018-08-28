@@ -4,7 +4,7 @@ import org.openstack4j.model.network.ext.HealthMonitorAssociate;
 import org.openstack4j.model.network.ext.builder.HealthMonitorAssociateBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
  * A  entity used to associate a healthMonitor with a pool
@@ -32,10 +32,10 @@ public class NeutronHealthMonitorAssociate implements HealthMonitorAssociate {
 	public String getId() {
 		return id;
 	}
-
+	
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("id", id).toString();
+		return Objects.toStringHelper(this).add("id", id).toString();
 	}
 
 	public static HealthMonitorAssociateBuilder builder(){
@@ -66,6 +66,6 @@ public class NeutronHealthMonitorAssociate implements HealthMonitorAssociate {
 			m.id = id;
 			return this;
 		}
-	}
+	} 
 
 }
