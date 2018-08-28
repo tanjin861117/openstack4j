@@ -10,14 +10,13 @@ import org.openstack4j.openstack.common.ListResult;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
  * Tenant Model class use to group/isolate resources and/or identity objects
- *
+ * 
  * @author Jeremy Unruh
- *
+ * 
  * @see <a href="http://docs.openstack.org/api/openstack-identity-service/2.0/content/GET_listTenants_v2.0_tenants_Tenant_Operations.html#GET_listTenants_v2.0_tenants_Tenant_Operations-Response"
  */
 @JsonRootName("tenant")
@@ -29,19 +28,19 @@ public class KeystoneTenant implements Tenant {
 	private String name;
 	private String description;
 	private Boolean enabled = true;
-
+	
 	/**
 	 * @return the Tenant builder
 	 */
 	public static TenantBuilder builder() {
 		return new TenantConcreteBuilder();
 	}
-
+	
 	@Override
 	public TenantBuilder toBuilder() {
 		return new TenantConcreteBuilder(this);
 	}
-
+	
 	/**
 	 * By providing an ID it is assumed this object will be mapped to an existing Tenant
 	 *
@@ -50,22 +49,22 @@ public class KeystoneTenant implements Tenant {
 	public String getId() {
 		return id;
 	}
-
+	
 	/**
 	 * @return the name of the tenant
 	 */
 	public String getName() {
 		return name;
 	}
-
-
+	
+	
 	/**
 	 * @return the description of the tenant
 	 */
 	public String getDescription() {
 		return description;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -73,7 +72,7 @@ public class KeystoneTenant implements Tenant {
 	public boolean isEnabled() {
 		return (enabled != null && enabled);
 	}
-
+	
 	/**
 	 * Sets the enabled.
 	 *
@@ -82,7 +81,7 @@ public class KeystoneTenant implements Tenant {
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -108,7 +107,7 @@ public class KeystoneTenant implements Tenant {
 	public void addUser(String userId, String roleId) {
 		Apis.getIdentityV2Services().roles().addUserRole(id, userId, roleId);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -116,7 +115,7 @@ public class KeystoneTenant implements Tenant {
 	public void removeUser(String userId, String roleId) {
 		Apis.getIdentityV2Services().roles().removeUserRole(id, userId, roleId);
 	}
-
+	
 	 /**
  	 * {@inheritDoc}
  	 */
@@ -124,7 +123,7 @@ public class KeystoneTenant implements Tenant {
    public int hashCode() {
       return Objects.hashCode(id, name, description);
    }
-
+	 
 	 /**
  	 * {@inheritDoc}
  	 */
@@ -137,29 +136,29 @@ public class KeystoneTenant implements Tenant {
             && Objects.equal(this.name, that.name)
             && Objects.equal(this.description, that.description);
    }
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public String toString() {
-		return MoreObjects.toStringHelper(this).omitNullValues()
+		return Objects.toStringHelper(this).omitNullValues()
 				   .add("id", id).add("name", name).add("description", description)
 				   .add("enabled", enabled)
 				   .toString();
 	}
-
+	
 	public static class TenantConcreteBuilder implements TenantBuilder {
 
 		KeystoneTenant model;
-
+		
 		TenantConcreteBuilder() {
 			this(new KeystoneTenant());
 		}
-
+		
 		TenantConcreteBuilder(KeystoneTenant model) {
 			this.model = model;
 		}
-
+		
 		/**
 		 * @see KeystoneTenant#getName()
 		 */
@@ -167,7 +166,7 @@ public class KeystoneTenant implements Tenant {
 			model.name = name;
 			return this;
 		}
-
+		
 		/**
 		 * @see KeystoneTenant#getDescription()
 		 */
@@ -175,7 +174,7 @@ public class KeystoneTenant implements Tenant {
 			model.description = desc;
 			return this;
 		}
-
+		
 		/**
 		 * @see KeystoneTenant#getId()
 		 */
@@ -183,7 +182,7 @@ public class KeystoneTenant implements Tenant {
 			model.id = id;
 			return this;
 		}
-
+		
 		/**
 		 * @see KeystoneTenant#getEnabled()
 		 */
@@ -191,7 +190,7 @@ public class KeystoneTenant implements Tenant {
 			model.enabled = enabled;
 			return this;
 		}
-
+		
 		/**
 		 * {@inheritDoc}
 		 */
@@ -210,18 +209,18 @@ public class KeystoneTenant implements Tenant {
 			return this;
 		}
 	}
-
+	
 	public static class Tenants extends ListResult<KeystoneTenant> {
 
 		private static final long serialVersionUID = 1L;
 		@JsonProperty("tenants")
 		protected List<KeystoneTenant> list;
-
+		
 		public List<KeystoneTenant> value() {
 			return list;
 		}
 	}
-
+	
 	/**
 	 * Used for backwards compatibility in fetching a Tenant By Name.  Older deployments return a single object
 	 * or null whereas newer deployments return an [] containing a single element
@@ -229,15 +228,15 @@ public class KeystoneTenant implements Tenant {
 	public static class BackwardsCompatTenants extends Tenants {
 
         private static final long serialVersionUID = 1L;
-
+        
         @JsonProperty("tenant")
-        private KeystoneTenant tenant;
-
-	    public KeystoneTenant getOneOrNull()
+        private KeystoneTenant tenant;  
+        
+	    public KeystoneTenant getOneOrNull() 
 	    {
 	        if (tenant != null)
 	            return tenant;
-
+	        
 	        return (list != null && list.size() > 0) ? list.get(0) : null;
 	    }
 	}

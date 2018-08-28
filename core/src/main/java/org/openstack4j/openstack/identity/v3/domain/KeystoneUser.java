@@ -1,28 +1,22 @@
 package org.openstack4j.openstack.identity.v3.domain;
 
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.google.common.base.Objects;
 import org.openstack4j.model.identity.v3.Domain;
 import org.openstack4j.model.identity.v3.User;
 import org.openstack4j.model.identity.v3.builder.UserBuilder;
 import org.openstack4j.openstack.common.ListResult;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
+import java.util.List;
+import java.util.Map;
 
-/**
- * User model class for identity/v3
- *
- * @see <a href= "http://developer.openstack.org/api-ref-identity-v3.html#users-v3">API reference</a>
- */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(
+        ignoreUnknown = true
+)
 @JsonRootName("user")
 public class KeystoneUser implements User {
-
     private static final long serialVersionUID = 1L;
     @JsonProperty
     private String id;
@@ -38,159 +32,93 @@ public class KeystoneUser implements User {
     @JsonProperty("default_project_id")
     private String defaultProjectId;
     private Map<String, String> links;
-    private Boolean enabled = true;
+    private Boolean enabled = Boolean.valueOf(true);
 
-    /**
-     * @return the user builder
-     */
+    private String created_at;
+
+    public KeystoneUser() {
+    }
+
     public static UserBuilder builder() {
-        return new UserConcreteBuilder();
+        return new KeystoneUser.UserConcreteBuilder();
     }
 
-    @Override
     public UserBuilder toBuilder() {
-        return new UserConcreteBuilder(this);
+        return new KeystoneUser.UserConcreteBuilder(this);
     }
 
-    /**
-     * @return the id of the user
-     */
-    @Override
     public String getId() {
-        return id;
+        return this.id;
     }
 
-    /**
-     * @return the of the user
-     */
-    @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    /**
-     * @return the email of the user
-     */
-    @Override
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
-    /**
-     * @return the password of the user
-     */
-    @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
-    /**
-     * @return the description of the user
-     */
-    @Override
+    public void setPassword(String password){
+        this.password = password;
+    }
+
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
-    /**
-     * @return the domainId of the user
-     */
-    @Override
     public String getDomainId() {
-        return domainId;
+        return this.domainId;
     }
 
-    /**
-     * @return the domain of the user
-     */
-    @Override
     public Domain getDomain() {
-        return domain;
+        return this.domain;
     }
 
-    /**
-     * @return the defaultProjectId of the user
-     */
-    @Override
     public String getDefaultProjectId() {
-        return defaultProjectId;
+        return this.defaultProjectId;
     }
 
-    /**
-     * @return the links of the user
-     */
-    @Override
     public Map<String, String> getLinks() {
-        return links;
+        return this.links;
     }
 
-    /**
-     * @return the enabled of the user
-     */
-    @Override
     public boolean isEnabled() {
-        return enabled != null && enabled;
+        return this.enabled != null && this.enabled.booleanValue();
     }
 
-    /**
-     * set user enabled
-     *
-     * @param enabled the new enabled status
-     */
-    @Override
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
-    @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
-                .add("name", name)
-                .add("id", id)
-                .add("email", email)
-                .add("password", password)
-                .add("description", description)
-                .add("domainId", domainId)
-                .add("links", links)
-                .add("enabled", enabled)
-                .add("defaultProjectId", defaultProjectId)
-                .toString();
+        return Objects.toStringHelper(this).omitNullValues().add("name", this.name).add("id", this.id).add("email", this.email).add("password", this.password).add("description", this.description).add("domainId", this.domainId).add("links", this.links).add("enabled", this.enabled).add("defaultProjectId", this.defaultProjectId).toString();
     }
 
-    /**
-    * {@inheritDoc}
-    */
-   @Override
-   public boolean equals(Object obj) {
-     if (this == obj) return true;
-     if (obj == null || getClass() != obj.getClass()) return false;
-     KeystoneUser that = KeystoneUser.class.cast(obj);
-     return Objects.equal(this.name, that.name)
-           && Objects.equal(this.id, that.id)
-           && Objects.equal(this.email, that.email)
-           && Objects.equal(this.password, that.password)
-           && Objects.equal(this.description, that.description)
-           && Objects.equal(this.domainId, that.domainId)
-           && Objects.equal(this.links, that.domainId)
-           && Objects.equal(this.enabled, that.enabled)
-           && Objects.equal(this.defaultProjectId, that.defaultProjectId);
-  }
-
-
-    public static class Users extends ListResult<KeystoneUser> {
-
-        private static final long serialVersionUID = 1L;
-        @JsonProperty("users")
-        private List<KeystoneUser> list;
-
-        @Override
-        public List<KeystoneUser> value() {
-            return list;
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj != null && this.getClass() == obj.getClass()) {
+            KeystoneUser that = (KeystoneUser) KeystoneUser.class.cast(obj);
+            return Objects.equal(this.name, that.name) && Objects.equal(this.id, that.id) && Objects.equal(this.email, that.email) && Objects.equal(this.password, that.password) && Objects.equal(this.description, that.description) && Objects.equal(this.domainId, that.domainId) && Objects.equal(this.links, that.domainId) && Objects.equal(this.enabled, that.enabled) && Objects.equal(this.defaultProjectId, that.defaultProjectId);
+        } else {
+            return false;
         }
     }
 
-    public static class UserConcreteBuilder implements UserBuilder {
+    public String getCreated_at() {
+        return created_at;
+    }
 
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public static class UserConcreteBuilder implements UserBuilder {
         KeystoneUser model;
 
         UserConcreteBuilder() {
@@ -201,114 +129,82 @@ public class KeystoneUser implements User {
             this.model = model;
         }
 
-        /**
-         * @see KeystoneUser#getId()
-         */
-        @Override
         public UserBuilder id(String id) {
-            model.id = id;
+            this.model.id = id;
             return this;
         }
 
-        /**
-         * @return the KeystoneUser model
-         */
-        @Override
         public User build() {
-            return model;
+            return this.model;
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
         public UserBuilder from(User in) {
-            if (in != null)
+            if (in != null) {
                 this.model = (KeystoneUser) in;
+            }
+
             return this;
         }
 
-        /**
-         * @see KeystoneUser#getName()
-         */
-        @Override
         public UserBuilder name(String name) {
-            model.name = name;
+            this.model.name = name;
             return this;
         }
 
-        /**
-         * @see KeystoneUser#getDefaultProjectId()
-         */
-        @Override
         public UserBuilder defaultProjectId(String defaultProjectId) {
-            model.defaultProjectId = defaultProjectId;
+            this.model.defaultProjectId = defaultProjectId;
             return this;
         }
 
-        /**
-         * @see KeystoneUser#getDomainId()
-         */
-        @Override
         public UserBuilder domainId(String domainId) {
-            model.domainId = domainId;
+            this.model.domainId = domainId;
             return this;
         }
 
-        /**
-         * @see KeystoneUser#getDomain()
-         */
-        @Override
         public UserBuilder domain(Domain domain) {
-            if (domain != null && domain.getId() != null)
-                model.domainId = domain.getId();
+            if (domain != null && domain.getId() != null) {
+                this.model.domainId = domain.getId();
+            }
+
             return this;
         }
 
-        /**
-         * @see KeystoneUser#getEmail()
-         */
-        @Override
         public UserBuilder email(String email) {
-            model.email = email;
+            this.model.email = email;
             return this;
         }
 
-        /**
-         * @see KeystoneUser#getPassword()
-         */
-        @Override
         public UserBuilder password(String password) {
-            model.password = password;
+            this.model.password = password;
             return this;
         }
 
-        /**
-         * @see KeystoneUser#getLinks()
-         */
-        @Override
         public UserBuilder links(Map<String, String> links) {
-            model.links = links;
+            this.model.links = links;
             return this;
         }
 
-        /**
-         * @see KeystoneUser#isEnabled()
-         */
-        @Override
         public UserBuilder enabled(boolean enabled) {
-            model.enabled = enabled;
+            this.model.enabled = Boolean.valueOf(enabled);
             return this;
         }
 
-        /**
-         * @see KeystoneUser#getDescription()
-         */
-        @Override
         public UserBuilder description(String description) {
-            model.description = description;
+            this.model.description = description;
             return this;
         }
     }
 
+    public static class Users extends ListResult<KeystoneUser> {
+        private static final long serialVersionUID = 1L;
+        @JsonProperty("users")
+        private List<KeystoneUser> list;
+
+        public Users() {
+        }
+
+        public List<KeystoneUser> value() {
+            return this.list;
+        }
+    }
 }

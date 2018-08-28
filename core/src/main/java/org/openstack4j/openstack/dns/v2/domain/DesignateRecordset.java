@@ -2,9 +2,7 @@ package org.openstack4j.openstack.dns.v2.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-
 import org.openstack4j.model.dns.v2.Recordset;
 import org.openstack4j.model.dns.v2.Action;
 import org.openstack4j.model.dns.v2.Status;
@@ -134,7 +132,7 @@ public class DesignateRecordset implements Recordset {
      */
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
+        return Objects.toStringHelper(this).omitNullValues()
                 .add("id", id)
                 .add("projectId", projectId)
                 .add("name", name)

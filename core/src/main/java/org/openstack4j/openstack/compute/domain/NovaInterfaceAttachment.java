@@ -1,14 +1,13 @@
 package org.openstack4j.openstack.compute.domain;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.google.common.base.Objects;
 import org.openstack4j.model.compute.InterfaceAttachment;
 import org.openstack4j.model.compute.PortState;
 import org.openstack4j.openstack.common.ListResult;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
+import java.util.List;
 
 @JsonRootName("interfaceAttachment")
 public class NovaInterfaceAttachment implements InterfaceAttachment {
@@ -30,7 +29,7 @@ public class NovaInterfaceAttachment implements InterfaceAttachment {
     }
 
     public NovaInterfaceAttachment(String portId) {
-        this.portId = portId;
+        this.netId = portId;
     }
 
     @Override
@@ -60,10 +59,10 @@ public class NovaInterfaceAttachment implements InterfaceAttachment {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
-                  .add("mac_addr", macAddr).add("net_id", netId).add("port_id", portId)
-                  .add("port_state", portState).add("fixed_ips", fixedIps)
-                  .toString();
+        return Objects.toStringHelper(this).omitNullValues()
+                .add("mac_addr", macAddr).add("net_id", netId).add("port_id", portId)
+                .add("port_state", portState).add("fixed_ips", fixedIps)
+                .toString();
     }
 
     public static class NovaInterfaceAttachments extends ListResult<NovaInterfaceAttachment> {
@@ -101,8 +100,8 @@ public class NovaInterfaceAttachment implements InterfaceAttachment {
 
         @Override
         public String toString() {
-            return MoreObjects.toStringHelper(this).omitNullValues()
-                      .add("ip_address", ipAddress).add("subnet_id", subnetId).toString();
+            return Objects.toStringHelper(this).omitNullValues()
+                    .add("ip_address", ipAddress).add("subnet_id", subnetId).toString();
         }
     }
 

@@ -46,7 +46,12 @@ public class BlockVolumeServiceImpl extends BaseBlockStorageServices implements 
      */
     @Override
     public List<? extends Volume> list(Map<String, String> filteringParams) {
-        Invocation<Volumes> volumeInvocation = buildInvocation(filteringParams);
+        Invocation<Volumes> volumeInvocation = buildInvocation("/volumes/detail", filteringParams);
+        return volumeInvocation.execute().getList();
+    }
+
+    public List<? extends Volume> list(String tag, Map<String, String> filteringParams) {
+        Invocation<Volumes> volumeInvocation = buildInvocation("/volumes/detail", filteringParams);
         return volumeInvocation.execute().getList();
     }
 
@@ -91,6 +96,12 @@ public class BlockVolumeServiceImpl extends BaseBlockStorageServices implements 
                 .execute();
     }
 
+    public ActionResponse bootable(String volumeId, boolean bootable) {
+        return post(ActionResponse.class, uri("/volumes/%s/action", volumeId))
+                .entity(new BootableStatusAction(bootable))
+                .execute();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -102,20 +113,6 @@ public class BlockVolumeServiceImpl extends BaseBlockStorageServices implements 
                 .entity(new ExtendAction(newSize))
                 .execute();
     }
-
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ActionResponse bootable(String volumeId, Boolean bootable) {
-        checkNotNull(volumeId);
-        checkNotNull(bootable);
-        return post(ActionResponse.class, uri("/volumes/%s/action", volumeId))
-                .entity(new SetBootableAction(bootable))
-                .execute();
-    }
-
 
     /**
      * {@inheritDoc}
@@ -137,6 +134,16 @@ public class BlockVolumeServiceImpl extends BaseBlockStorageServices implements 
 
         return put(ActionResponse.class, uri("/volumes/%s", volumeId))
                 .entity(Builders.volume().name(name).description(description).build())
+                .execute();
+    }
+
+    public ActionResponse update(String volumeId, String name, String description, boolean bootable) {
+        checkNotNull(volumeId);
+        if (name == null && description == null)
+            return ActionResponse.actionFailed("Name and Description are both required", 412);
+
+        return put(ActionResponse.class, uri("/volumes/%s", volumeId))
+                .entity(Builders.volume().name(name).description(description).bootable(bootable).build())
                 .execute();
     }
 
@@ -182,8 +189,8 @@ public class BlockVolumeServiceImpl extends BaseBlockStorageServices implements 
         return Apis.get(BlockVolumeTransferService.class);
     }
 
-    private Invocation<Volumes> buildInvocation(Map<String, String> filteringParams) {
-        Invocation<Volumes> volumeInvocation = get(Volumes.class, "/volumes/detail");
+    private Invocation<Volumes> buildInvocation(String uri, Map<String, String> filteringParams) {
+        Invocation<Volumes> volumeInvocation = get(Volumes.class, uri);
         if (filteringParams == null) {
             return volumeInvocation;
         } else {
@@ -205,62 +212,4 @@ public class BlockVolumeServiceImpl extends BaseBlockStorageServices implements 
                 .execute();
     }
 
-    /**
-     * <p>Description:Attach volume to a server</p>
-     * Volume status must be available.
-     * You should set instanceId or hostName.
-     * <p>Author:Wang Ting/王婷</p>
-     *
-     * @param volumeId
-     * @param instanceId
-     * @param mountpoint
-     * @param hostName
-     * @return ActionResponse
-     */
-    @Override
-    public ActionResponse attach(String volumeId, String instanceId, String mountpoint, String hostName) {
-        checkNotNull(volumeId);
-        checkNotNull(instanceId);
-        checkNotNull(mountpoint);
-        checkNotNull(hostName);
-        AttachAction attach = new AttachAction(instanceId, mountpoint, hostName);
-        return post(ActionResponse.class, uri("/volumes/%s/action", volumeId)).entity(attach).execute();
-    }
-
-    /**
-     * <p>Description:Force detach a volume</p>
-     * <p>Author:Wang Ting/王婷</p>
-     *
-     * @param volumeId
-     * @param initiator
-     * @param attachmentId
-     * @return
-     * @Title: forceDetach
-     * @see org.openstack4j.api.storage.BlockVolumeService#forceDetach(java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    public ActionResponse forceDetach(String volumeId, String initiator, String attachmentId) {
-        checkNotNull(volumeId);
-        checkNotNull(initiator);
-        checkNotNull(attachmentId);
-        ForceDetachConnector connector = new ForceDetachConnector(initiator);
-        ForceDetachAction detach = new ForceDetachAction(attachmentId, connector);
-        return post(ActionResponse.class, uri("/volumes/%s/action", volumeId)).entity(detach).execute();
-    }
-    
-	/**
-	 * Detach volume from server
-	 * @author capitek-xuning（首信科技-徐宁）
-	 * @param volumeId
-	 * @param attachmentId
-	 * @return
-	 */
-	@Override
-	public ActionResponse detach(String volumeId, String attachmentId) {
-		checkNotNull(volumeId);
-		checkNotNull(attachmentId);
-		DetachAction detach = new DetachAction(attachmentId);
-		return post(ActionResponse.class, uri("/volumes/%s/action", volumeId)).entity(detach).execute();
-	}
-    
 }

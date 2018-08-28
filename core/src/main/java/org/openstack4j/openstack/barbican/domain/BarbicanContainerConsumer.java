@@ -1,7 +1,7 @@
 package org.openstack4j.openstack.barbican.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import org.openstack4j.model.barbican.ContainerConsumer;
 
 public class BarbicanContainerConsumer implements ContainerConsumer {
@@ -31,7 +31,7 @@ public class BarbicanContainerConsumer implements ContainerConsumer {
      */
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
+        return Objects.toStringHelper(this).omitNullValues()
                 .add("name", name).add("url", url)
                 .toString();
     }

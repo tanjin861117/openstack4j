@@ -1,297 +1,150 @@
 package org.openstack4j.openstack.networking.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.google.common.base.Objects;
 import org.openstack4j.api.Apis;
 import org.openstack4j.model.network.Network;
 import org.openstack4j.model.network.NetworkType;
 import org.openstack4j.model.network.State;
 import org.openstack4j.model.network.Subnet;
 import org.openstack4j.model.network.builder.NetworkBuilder;
-import org.openstack4j.model.network.builder.PortBuilder;
 import org.openstack4j.openstack.common.ListResult;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.Sets;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * An OpenStack (Neutron) network
- *
- * @author Jeremy Unruh
- */
 @JsonRootName("network")
-public class NeutronNetwork implements Network {
-
+public class NeutronNetwork
+        implements Network {
     private static final long serialVersionUID = 1L;
-
     private State status;
+
     @JsonProperty
     private List<String> subnets;
     private List<NeutronSubnet> neutronSubnets;
     private String name;
+
     @JsonProperty("provider:physical_network")
     private String providerPhyNet;
+
     @JsonProperty("admin_state_up")
     private Boolean adminStateUp;
+
     @JsonProperty("tenant_id")
     private String tenantId;
+
     @JsonProperty("provider:network_type")
     private NetworkType networkType;
+
     @JsonProperty("router:external")
     private Boolean routerExternal;
     private String id;
     private Boolean shared;
+
     @JsonProperty("provider:segmentation_id")
     private String providerSegID;
-    @JsonProperty("availability_zone_hints")
-    private List<String> availabilityZoneHints;
-    @JsonProperty("availability_zones")
-    private List<String> availabilityZones;    
-    
-    
-    /**
-     * The maximum transmission unit (MTU) value to address fragmentation. Minimum value is 68 for IPv4, and 1280 for IPv6.
-     */
-    @JsonProperty("mtu")
-	private Integer mtu;
+
+    private String mtu;
 
     public static NetworkBuilder builder() {
         return new NetworkConcreteBuilder();
     }
 
-    /**
-     * Wraps this Network into a Builder
-     * @return the network builder
-     */
     public NetworkBuilder toBuilder() {
         return new NetworkConcreteBuilder(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setId(String id) {
-        this.id = id;
+    public String getMtu() {
+        return mtu;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
+    public void setMtu(String mtu) {
+        this.mtu = mtu;
+    }
+
+    public State getStatus() {
+        return this.status;
+    }
+
+    public List<String> getSubnets() {
+        return this.subnets;
+    }
+
+    public List<? extends Subnet> getNeutronSubnets() {
+        if ((this.neutronSubnets == null) && (this.subnets != null) && (this.subnets.size() > 0)) {
+            this.neutronSubnets = new ArrayList();
+            for (String subnetId : this.subnets) {
+                NeutronSubnet sub = (NeutronSubnet) Apis.getNetworkingServices().subnet().get(subnetId);
+                this.neutronSubnets.add(sub);
+            }
+        }
+        return this.neutronSubnets;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
+    public String getProviderPhyNet() {
+        return this.providerPhyNet;
+    }
+
+    public boolean isAdminStateUp() {
+        return (this.adminStateUp != null) && (this.adminStateUp.booleanValue());
+    }
+
+    public String getTenantId() {
+        return this.tenantId;
+    }
+
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public State getStatus() {
-        return status;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> getSubnets() {
-        return subnets;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<? extends Subnet> getNeutronSubnets() {
-        if ( neutronSubnets == null && (subnets != null && subnets.size() > 0))
-        {
-            neutronSubnets = new ArrayList<NeutronSubnet>();
-            for ( String subnetId : subnets) {
-                NeutronSubnet sub = (NeutronSubnet)Apis.getNetworkingServices().subnet().get(subnetId);
-                neutronSubnets.add(sub);
-            }
-        }
-        return neutronSubnets;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getProviderPhyNet() {
-        return providerPhyNet;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isAdminStateUp() {
-        return adminStateUp != null && adminStateUp;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public NetworkType getNetworkType() {
-        return networkType;
+        return this.networkType;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     @JsonIgnore
     public boolean isRouterExternal() {
-        return routerExternal != null && routerExternal;
+        return (this.routerExternal != null) && (this.routerExternal.booleanValue());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getId() {
-        return id;
+        return this.id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public boolean isShared() {
-        return shared != null && shared;
+        return (this.shared != null) && (this.shared.booleanValue());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getProviderSegID() {
-        return providerSegID;
+        return this.providerSegID;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-	public Integer getMTU() {
-		return mtu;
-	}
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> getAvailabilityZoneHints() {
-        return availabilityZoneHints;
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> getAvailabilityZones() {
-        return availabilityZones;
-    }
-    
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
-                .add("name", name).add("status", status).add("subnets", subnets).add("provider:physical_network", providerPhyNet)
-                .add("adminStateUp", adminStateUp).add("tenantId", tenantId).add("provider:network_type", networkType).add("router:external", routerExternal)
-                .add("id", id).add("shared", shared).add("provider:segmentation_id", providerSegID)
-                .add("mtu", mtu).add("availabilityZoneHints", availabilityZoneHints).add("availabilityZones", availabilityZones)
+        return Objects.toStringHelper(this).omitNullValues()
+                .add("name", this.name)
+                .add("status", this.status).add("subnets", this.subnets).add("provider:physical_network", this.providerPhyNet)
+                .add("adminStateUp", this.adminStateUp)
+                .add("tenantId", this.tenantId).add("provider:network_type", this.networkType).add("router:external", this.routerExternal)
+                .add("id", this.id)
+                .add("shared", this.shared).add("provider:segmentation_id", this.providerSegID)
                 .toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        return java.util.Objects.hash(name, status, subnets,
-                providerPhyNet, adminStateUp, tenantId, networkType,
-                routerExternal, id, shared, providerSegID, availabilityZoneHints, availabilityZones);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if (obj instanceof NeutronNetwork) {
-            NeutronNetwork that = (NeutronNetwork) obj;
-            if (java.util.Objects.equals(name, that.name) &&
-                    java.util.Objects.equals(status, that.status) &&
-                    java.util.Objects.equals(subnets, that.subnets) &&
-                    java.util.Objects.equals(providerPhyNet, that.providerPhyNet) &&
-                    java.util.Objects.equals(adminStateUp, that.adminStateUp) &&
-                    java.util.Objects.equals(tenantId, that.tenantId) &&
-                    java.util.Objects.equals(networkType, that.networkType) &&
-                    java.util.Objects.equals(routerExternal, that.routerExternal) &&
-                    java.util.Objects.equals(id, that.id) &&
-                    java.util.Objects.equals(shared, that.shared) &&
-                    java.util.Objects.equals(providerSegID, that.providerSegID) &&
-                    java.util.Objects.equals(availabilityZoneHints, that.availabilityZoneHints) &&
-                    java.util.Objects.equals(availabilityZones, that.availabilityZones)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static class Networks extends ListResult<NeutronNetwork> {
-
-        private static final long serialVersionUID = 1L;
-
-        @JsonProperty("networks")
-        private List<NeutronNetwork> networks;
-
-        public List<NeutronNetwork> value() {
-            return networks;
-        }
-    }
-
-    public static class NetworkConcreteBuilder implements NetworkBuilder {
-
+    public static class NetworkConcreteBuilder
+            implements NetworkBuilder {
         private NeutronNetwork m;
 
         public NetworkConcreteBuilder() {
@@ -302,72 +155,64 @@ public class NeutronNetwork implements Network {
             this.m = m;
         }
 
-        @Override
         public NetworkBuilder name(String name) {
-            m.name = name;
+            this.m.name = name;
             return this;
         }
 
-        @Override
         public NetworkBuilder adminStateUp(boolean adminStateUp) {
-            m.adminStateUp = adminStateUp;
+            this.m.adminStateUp = Boolean.valueOf(adminStateUp);
             return this;
         }
 
-        @Override
         public NetworkBuilder networkType(NetworkType networkType) {
-            m.networkType = networkType;
+            this.m.networkType = networkType;
             return this;
         }
 
-        @Override
         public NetworkBuilder physicalNetwork(String providerPhysicalNetwork) {
-            m.providerPhyNet = providerPhysicalNetwork;
+            this.m.providerPhyNet = providerPhysicalNetwork;
             return this;
         }
 
-        @Override
         public NetworkBuilder segmentId(String providerSegmentationId) {
-            m.providerSegID = providerSegmentationId;
+            this.m.providerSegID = providerSegmentationId;
             return this;
         }
 
-        @Override
         public NetworkBuilder tenantId(String tenantId) {
-            m.tenantId = tenantId;
+            this.m.tenantId = tenantId;
             return this;
         }
 
-        @Override
         public NetworkBuilder isShared(boolean shared) {
-            m.shared = shared;
+            this.m.shared = Boolean.valueOf(shared);
             return this;
         }
 
-        @Override
         public NetworkBuilder isRouterExternal(boolean routerExternal) {
-            m.routerExternal = routerExternal;
+            this.m.routerExternal = Boolean.valueOf(routerExternal);
             return this;
         }
 
-        @Override
         public Network build() {
-            return m;
+            return this.m;
         }
 
-        @Override
         public NetworkBuilder from(Network in) {
-            m = (NeutronNetwork) in;
+            this.m = ((NeutronNetwork) in);
             return this;
         }
-        
-        @Override
-		public NetworkBuilder addAvailabilityZoneHints(String availabilityZone) {
-        	if(m.availabilityZoneHints==null){
-				m.availabilityZoneHints = new ArrayList<>();
-			}
-			m.availabilityZoneHints.add(availabilityZone);
-			return this;			        	
-		}
+    }
+
+    public static class Networks extends ListResult<NeutronNetwork> {
+        private static final long serialVersionUID = 1L;
+
+        @JsonProperty("networks")
+        private List<NeutronNetwork> networks;
+
+        public List<NeutronNetwork> value() {
+            return this.networks;
+        }
     }
 }

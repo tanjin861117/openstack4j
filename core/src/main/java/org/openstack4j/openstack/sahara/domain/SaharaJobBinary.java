@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
  * For mapping JSON response to/from java objects
@@ -112,7 +112,7 @@ public class SaharaJobBinary implements JobBinary {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
+        return Objects.toStringHelper(this).omitNullValues()
                    .add("description", description)
                    .add("url", url)
                    .add("tenant_id", tenantId)
@@ -196,6 +196,6 @@ public class SaharaJobBinary implements JobBinary {
             m.credentials = new SaharaJobBinaryCredentials(user, password);
             return this;
         }
-
+        
     }
 }

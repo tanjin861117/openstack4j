@@ -11,9 +11,7 @@ import org.openstack4j.model.identity.v2.ServiceEndpoint;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-
 import org.openstack4j.openstack.common.ListResult;
 import org.slf4j.LoggerFactory;
 
@@ -128,7 +126,7 @@ public class KeystoneServiceEndpoint implements ServiceEndpoint {
 	 */
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).omitNullValues()
+		return Objects.toStringHelper(this).omitNullValues()
 				.add("id", id).add("region", region).add("publicURL", publicURL)
 				.add("internalURL", internalURL).add("adminURL", adminURL)
 				.add("serviceId", serviceId)

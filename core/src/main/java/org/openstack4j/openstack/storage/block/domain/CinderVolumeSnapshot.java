@@ -5,222 +5,202 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import com.google.common.base.Objects;
 import org.openstack4j.model.storage.block.Volume.Status;
 import org.openstack4j.model.storage.block.VolumeSnapshot;
 import org.openstack4j.model.storage.block.builder.VolumeSnapshotBuilder;
 import org.openstack4j.openstack.common.ListResult;
 
-/**
- * An OpenStack Volume Snapshot which is a point-in-time copy of a volume.
- *
- * @author Jeremy Unruh
- */
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 @JsonRootName("snapshot")
 public class CinderVolumeSnapshot implements VolumeSnapshot {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String id;
-	@JsonProperty("name")
-	private String name;
-	@JsonProperty("display_name")
-	private String displayName;
-	@JsonProperty("description")
-	private String description;
-	@JsonProperty("display_description")
-	private String displayDescription;
-	@JsonProperty("volume_id")
-	private String volumeId;
-	private Status status;
-	@JsonInclude(Include.NON_DEFAULT)
-	@JsonProperty("size")
-	private Integer size;
-	@JsonProperty("created_at")
-	private Date created;
-	@JsonProperty
-	private Boolean force;
-	@JsonProperty("metadata")
-	private Map<String, String> metadata;
+    private String id;
+    private String name;
+    private String description;
+    @JsonProperty("volume_id")
+    private String volumeId;
+    private Status status;
+    @JsonInclude(Include.NON_DEFAULT)
+    @JsonProperty("size")
+    private Integer size;
+    @JsonProperty("created_at")
+    private Date created;
+    @JsonProperty
+    private Boolean force;
+    @JsonProperty("metadata")
+    private Map<String, String> metadata;
+    @JsonProperty("snapshot_tag")
+    private String snapshotTag;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public VolumeSnapshotBuilder toBuilder() {
-		return new ConcreteVolumeSnapshotBuilder(this);
-	}
+    /**
+     * @return a new Volume Snapshot builder
+     */
+    public static VolumeSnapshotBuilder builder() {
+        return new ConcreteVolumeSnapshotBuilder();
+    }
 
-	/**
-	 * @return a new Volume Snapshot builder
-	 */
-	public static VolumeSnapshotBuilder builder() {
-		return new ConcreteVolumeSnapshotBuilder();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDisplayDescription() {
-		return displayDescription;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getVolumeId() {
-		return volumeId;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Status getStatus() {
-		return status;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int getSize() {
-		return (size != null) ? size : 0;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Date getCreated() {
-		return created;
-	}
-
-	/**
+    /**
      * {@inheritDoc}
      */
-	@JsonIgnore
-	@Override
-	public Map<String, String> getMetaData() {
-	    return metadata;
-	}
+    @Override
+    public VolumeSnapshotBuilder toBuilder() {
+        return new ConcreteVolumeSnapshotBuilder(this);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).omitNullValues()
-				     .add("id", id).add("name", name).add("description", description).add("volumeId", volumeId)
-				     .add("status", status).add("created", created).add("force", force).add("size", size).add("metadata", metadata)
-				     .toString();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getId() {
+        return id;
+    }
 
-	public static class VolumeSnapshots extends ListResult<CinderVolumeSnapshot> {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
 
-		private static final long serialVersionUID = 1L;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+        return description;
+    }
 
-		@JsonProperty("snapshots")
-		private List<CinderVolumeSnapshot> snapshots;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getVolumeId() {
+        return volumeId;
+    }
 
-		@Override
-		protected List<CinderVolumeSnapshot> value() {
-			return snapshots;
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Status getStatus() {
+        return status;
+    }
 
-	public static class ConcreteVolumeSnapshotBuilder implements VolumeSnapshotBuilder {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getSize() {
+        return (size != null) ? size : 0;
+    }
 
-		private CinderVolumeSnapshot m;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Date getCreated() {
+        return created;
+    }
 
-		ConcreteVolumeSnapshotBuilder() {
-			this(new CinderVolumeSnapshot());
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @JsonIgnore
+    @Override
+    public Map<String, String> getMetaData() {
+        return metadata;
+    }
 
-		ConcreteVolumeSnapshotBuilder(CinderVolumeSnapshot m) {
-			this.m = m;
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this).omitNullValues()
+                .add("id", id).add("name", name).add("description", description).add("volumeId", volumeId)
+                .add("status", status).add("created", created).add("force", force).add("size", size).add("metadata", metadata)
+                .toString();
+    }
 
-		@Override
-		public VolumeSnapshotBuilder name(String name) {
-			m.name = name;
-			m.displayName = name;
-			return this;
-		}
+    public static class VolumeSnapshots extends ListResult<CinderVolumeSnapshot> {
 
-		@Override
-		public VolumeSnapshotBuilder description(String description) {
-			m.description = description;
-			m.displayDescription = description;
-			return this;
-		}
+        private static final long serialVersionUID = 1L;
 
-		@Override
-		public VolumeSnapshotBuilder volume(String volumeId) {
-			m.volumeId = volumeId;
-			return this;
-		}
+        @JsonProperty("snapshots")
+        private List<CinderVolumeSnapshot> snapshots;
 
-		@Override
-		public VolumeSnapshotBuilder force(boolean force) {
-			m.force = force;
-			return this;
-		}
+        @Override
+        protected List<CinderVolumeSnapshot> value() {
+            return snapshots;
+        }
+    }
 
-		@Override
-		public VolumeSnapshotBuilder metadata(Map<String, String> metadata) {
-		    m.metadata = metadata;
-		    return this;
-		}
+    public static class ConcreteVolumeSnapshotBuilder implements VolumeSnapshotBuilder {
 
-		@Override
-		public VolumeSnapshot build() {
-			return m;
-		}
+        private CinderVolumeSnapshot m;
 
-		@Override
-		public VolumeSnapshotBuilder from(VolumeSnapshot in) {
-			m = (CinderVolumeSnapshot) in;
-			return this;
-		}
+        ConcreteVolumeSnapshotBuilder() {
+            this(new CinderVolumeSnapshot());
+        }
 
-	}
+        ConcreteVolumeSnapshotBuilder(CinderVolumeSnapshot m) {
+            this.m = m;
+        }
+
+        @Override
+        public VolumeSnapshotBuilder name(String name) {
+            m.name = name;
+            return this;
+        }
+
+        @Override
+        public VolumeSnapshotBuilder description(String description) {
+            m.description = description;
+            return this;
+        }
+
+        @Override
+        public VolumeSnapshotBuilder volume(String volumeId) {
+            m.volumeId = volumeId;
+            return this;
+        }
+
+        @Override
+        public VolumeSnapshotBuilder force(boolean force) {
+            m.force = force;
+            return this;
+        }
+
+        @Override
+        public VolumeSnapshotBuilder metadata(Map<String, String> metadata) {
+            m.metadata = metadata;
+            return this;
+        }
+
+        @Override
+        public VolumeSnapshot build() {
+            return m;
+        }
+
+        @Override
+        public VolumeSnapshotBuilder from(VolumeSnapshot in) {
+            m = (CinderVolumeSnapshot) in;
+            return this;
+        }
+
+        @Override
+        public VolumeSnapshotBuilder snapshotTag(String snapshotTag) {
+            m.snapshotTag = snapshotTag;
+            return this;
+        }
+
+    }
 
 }

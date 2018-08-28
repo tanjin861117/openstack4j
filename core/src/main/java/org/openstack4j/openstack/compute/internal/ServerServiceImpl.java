@@ -1,13 +1,5 @@
 package org.openstack4j.openstack.compute.internal;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.openstack4j.openstack.compute.domain.actions.CreateSnapshotAction.create;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import org.openstack4j.api.Apis;
 import org.openstack4j.api.compute.ServerService;
 import org.openstack4j.api.compute.ext.InstanceActionsService;
@@ -16,51 +8,31 @@ import org.openstack4j.core.transport.ExecutionOptions;
 import org.openstack4j.core.transport.HttpResponse;
 import org.openstack4j.core.transport.propagation.PropagateOnStatus;
 import org.openstack4j.model.common.ActionResponse;
-import org.openstack4j.model.compute.Action;
-import org.openstack4j.model.compute.RebootType;
-import org.openstack4j.model.compute.Server;
+import org.openstack4j.model.compute.*;
 import org.openstack4j.model.compute.Server.Status;
-import org.openstack4j.model.compute.ServerCreate;
-import org.openstack4j.model.compute.ServerPassword;
-import org.openstack4j.model.compute.ServerUpdateOptions;
-import org.openstack4j.model.compute.VNCConsole;
 import org.openstack4j.model.compute.VNCConsole.Type;
-import org.openstack4j.model.compute.VolumeAttachment;
 import org.openstack4j.model.compute.actions.BackupOptions;
 import org.openstack4j.model.compute.actions.EvacuateOptions;
 import org.openstack4j.model.compute.actions.LiveMigrateOptions;
 import org.openstack4j.model.compute.actions.RebuildOptions;
 import org.openstack4j.model.compute.builder.ServerCreateBuilder;
 import org.openstack4j.openstack.common.Metadata;
-import org.openstack4j.openstack.compute.domain.AdminPass;
-import org.openstack4j.openstack.compute.domain.ConsoleOutput;
-import org.openstack4j.openstack.compute.domain.ConsoleOutputOptions;
-import org.openstack4j.openstack.compute.domain.NovaPassword;
-import org.openstack4j.openstack.compute.domain.NovaServer;
+import org.openstack4j.openstack.compute.domain.*;
 import org.openstack4j.openstack.compute.domain.NovaServer.Servers;
-import org.openstack4j.openstack.compute.domain.NovaServerCreate;
-import org.openstack4j.openstack.compute.domain.NovaServerUpdate;
-import org.openstack4j.openstack.compute.domain.NovaVNCConsole;
-import org.openstack4j.openstack.compute.domain.NovaVolumeAttachment;
-import org.openstack4j.openstack.compute.domain.actions.BackupAction;
-import org.openstack4j.openstack.compute.domain.actions.BasicActions;
-import org.openstack4j.openstack.compute.domain.actions.BasicActions.ChangePassword;
-import org.openstack4j.openstack.compute.domain.actions.BasicActions.ConfirmResize;
-import org.openstack4j.openstack.compute.domain.actions.BasicActions.Migrate;
-import org.openstack4j.openstack.compute.domain.actions.BasicActions.Reboot;
-import org.openstack4j.openstack.compute.domain.actions.BasicActions.Resize;
-import org.openstack4j.openstack.compute.domain.actions.BasicActions.RevertResize;
-import org.openstack4j.openstack.compute.domain.actions.CreateSnapshotAction;
-import org.openstack4j.openstack.compute.domain.actions.EvacuateAction;
-import org.openstack4j.openstack.compute.domain.actions.LiveMigrationAction;
-import org.openstack4j.openstack.compute.domain.actions.RebuildAction;
-import org.openstack4j.openstack.compute.domain.actions.ResetStateAction;
-import org.openstack4j.openstack.compute.domain.actions.SecurityGroupActions;
-import org.openstack4j.openstack.compute.domain.actions.ServerAction;
+import org.openstack4j.openstack.compute.domain.NovaVolume.NovaVolumes;
+import org.openstack4j.openstack.compute.domain.actions.*;
+import org.openstack4j.openstack.compute.domain.actions.BasicActions.*;
 import org.openstack4j.openstack.compute.functions.ToActionResponseFunction;
 import org.openstack4j.openstack.compute.functions.WrapServerIfApplicableFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Server Operation API implementation
@@ -132,8 +104,8 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
     public Server boot(ServerCreate server) {
         checkNotNull(server);
         return post(NovaServer.class, uri("/servers"))
-                     .entity(WrapServerIfApplicableFunction.INSTANCE.apply(server))
-                     .execute();
+                .entity(WrapServerIfApplicableFunction.INSTANCE.apply(server))
+                .execute();
     }
 
     /**
@@ -151,8 +123,8 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
     public ActionResponse delete(String serverId) {
         checkNotNull(serverId);
         return ToActionResponseFunction.INSTANCE.apply(
-                    delete(Void.class, uri("/servers/%s", serverId)).executeWithResponse()
-               );
+                delete(Void.class, uri("/servers/%s", serverId)).executeWithResponse()
+        );
     }
 
     /**
@@ -174,30 +146,51 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
      */
     @Override
     public String createSnapshot(String serverId, String snapshotName) {
-        return invokeCreateSnapshotAction(serverId, snapshotName, null);
+        checkNotNull(serverId);
+        checkNotNull(snapshotName);
+
+        HttpResponse response = invokeActionWithResponse(serverId, CreateSnapshotAction.create(snapshotName));
+        String id = null;
+        if (response.getStatus() == 202) {
+            String location = response.header("location");
+            if (location != null && location.contains("/")) {
+                String[] s = location.split("/");
+                id = s[s.length - 1];
+            }
+
+        }
+        response.getEntity(Void.class);
+        return id;
+    }
+
+    @Override
+    public String createSnapshot(String serverId, String snapshotName, Map<String, String> metadata) {
+        return null;
+    }
+
+    @Override
+    public ServerPassword evacuate(String serverId, EvacuateOptions options) {
+        return null;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String createSnapshot(String serverId, String snapshotName, Map<String, String> metadata) {
-        return invokeCreateSnapshotAction(serverId, snapshotName, metadata);
-    }
-
-    private String invokeCreateSnapshotAction(String serverId, String snapshotName, Map<String, String> metadata) {
+    public String createImage(String serverId, String snapshotName,Map<String, String> metadata) {
         checkNotNull(serverId);
         checkNotNull(snapshotName);
-        CreateSnapshotAction createSnapshotAction = metadata != null && !metadata.isEmpty() ? create(snapshotName, metadata) : create(snapshotName);
-        HttpResponse response = invokeActionWithResponse(serverId, createSnapshotAction);
+        checkNotNull(metadata);
+
+        HttpResponse response = invokeActionWithResponse(serverId, CreateSnapshotAction.create(snapshotName,metadata));
         String id = null;
         if (response.getStatus() == 202) {
             String location = response.header("location");
-            if (location != null && location.contains("/"))
-            {
+            if (location != null && location.contains("/")) {
                 String[] s = location.split("/");
                 id = s[s.length - 1];
             }
+
         }
         response.getEntity(Void.class);
         return id;
@@ -276,16 +269,10 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
     @Override
     public String getConsoleOutput(String serverId, int numLines) {
         checkNotNull(serverId);
-
-        // Build options with the given numLines or default to full output
-        ConsoleOutputOptions consoleOutputOptions;
         if (numLines <= 0)
-        	consoleOutputOptions = new ConsoleOutputOptions();
-        else
-        	consoleOutputOptions = new ConsoleOutputOptions(numLines);
+            numLines = 50;
 
-        ConsoleOutput c = post(ConsoleOutput.class, uri("/servers/%s/action", serverId))
-                .entity(consoleOutputOptions).execute();
+        ConsoleOutput c = post(ConsoleOutput.class, uri("/servers/%s/action", serverId)).json(ConsoleOutput.getJSONAction(numLines)).execute();
         return (c != null) ? c.getOutput() : null;
     }
 
@@ -299,8 +286,8 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
             type = Type.NOVNC;
 
         return post(NovaVNCConsole.class, uri("/servers/%s/action", serverId))
-                    .entity(NovaVNCConsole.getConsoleForType(type))
-                    .execute();
+                .entity(NovaVNCConsole.getConsoleForType(type))
+                .execute();
     }
 
     /**
@@ -325,9 +312,13 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
      */
     @Override
     public VolumeAttachment attachVolume(String serverId, String volumeId, String device) {
-        return post(NovaVolumeAttachment.class, uri("/servers/%s/os-volume_attachments", serverId))
-                .entity(NovaVolumeAttachment.create(volumeId, device))
-                .execute(ExecutionOptions.<NovaVolumeAttachment>create(PropagateOnStatus.on(404)));
+        return post(NovaVolume.class, uri("/servers/%s/os-volume_attachments", serverId))
+                .entity(NovaVolume.create(volumeId, device))
+                .execute(ExecutionOptions.<NovaVolume>create(PropagateOnStatus.on(404)));
+    }
+
+    public List<? extends VolumeAttachment> listVolumes(String serverId) {
+        return get(NovaVolumes.class, uri("/servers/%s/os-volume_attachments", serverId)).execute().getList();
     }
 
     /**
@@ -336,8 +327,8 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
     @Override
     public ActionResponse detachVolume(String serverId, String attachmentId) {
         return ToActionResponseFunction.INSTANCE.apply(
-                   delete(Void.class,uri("/servers/%s/os-volume_attachments/%s", serverId, attachmentId)).executeWithResponse()
-                );
+                delete(Void.class, uri("/servers/%s/os-volume_attachments/%s", serverId, attachmentId)).executeWithResponse()
+        );
     }
 
     /**
@@ -399,7 +390,7 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
         Server server = null;
         long duration = 0;
         long maxTime = maxWaitUnit.toMillis(maxWait);
-        while ( duration < maxTime ) {
+        while (duration < maxTime) {
             server = get(serverId);
 
             if (server == null || server.getStatus() == status || server.getStatus() == Status.ERROR)
@@ -437,8 +428,8 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
         checkNotNull(serverId);
         checkNotNull(key);
         return ToActionResponseFunction.INSTANCE.apply(
-                  delete(Void.class, uri("/servers/%s/metadata/%s", serverId, key)).executeWithResponse()
-                );
+                delete(Void.class, uri("/servers/%s/metadata/%s", serverId, key)).executeWithResponse()
+        );
     }
 
     private int sleep(int ms) {
@@ -475,17 +466,5 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
     public ServerPassword getPassword(String serverId) {
         checkNotNull(serverId);
         return get(NovaPassword.class, uri("/servers/%s/os-server-password", serverId)).execute();
-    }   
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ServerPassword evacuate(String serverId, EvacuateOptions options) {
-        checkNotNull(serverId);
-      
-        return post(AdminPass.class, uri("/servers/%s/action", serverId))
-                    .entity(EvacuateAction.create(options))
-                    .execute();            
     }
 }

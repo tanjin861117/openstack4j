@@ -10,7 +10,7 @@ import org.openstack4j.openstack.common.ListResult;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MagnumContainer implements Container {
@@ -37,7 +37,7 @@ public class MagnumContainer implements Container {
     public static ContainerBuilder builder() {
         return new ContainerConcreteBuilder();
     }
-
+    
     @Override
     public ContainerBuilder toBuilder() {
         return new ContainerConcreteBuilder(this);
@@ -81,7 +81,7 @@ public class MagnumContainer implements Container {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues().add("status", status).add("uuid", uuid).add("links", links)
+        return Objects.toStringHelper(this).omitNullValues().add("status", status).add("uuid", uuid).add("links", links)
                 .add("image", image).add("environment", environment).add("command", command).add("memory", memory)
                 .add("bayUuid", bayUuid).add("name", name).toString();
     }

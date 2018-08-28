@@ -1,7 +1,0 @@
-{
-  "service": {
-    "status": "disabled",
-    "binary": "nova-compute",
-    "host": "some_host"
-  }
-}

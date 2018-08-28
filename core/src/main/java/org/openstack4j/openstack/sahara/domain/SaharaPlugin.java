@@ -10,11 +10,11 @@ import org.openstack4j.openstack.common.ListResult;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
  * For mapping JSON response to/from java objects
- *
+ * 
  * @author ekasit.kijsipongse@nectec.or.th
  */
 
@@ -94,7 +94,7 @@ public class SaharaPlugin implements Plugin {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues()
+        return Objects.toStringHelper(this).omitNullValues()
                 .add("name", name)
                 .add("title", title)
                 .add("description", description)

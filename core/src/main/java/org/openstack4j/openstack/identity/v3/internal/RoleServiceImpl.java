@@ -1,10 +1,5 @@
 package org.openstack4j.openstack.identity.v3.internal;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static org.openstack4j.core.transport.ClientConstants.PATH_ROLES;
-
-import java.util.List;
-
 import org.openstack4j.api.identity.v3.RoleService;
 import org.openstack4j.model.common.ActionResponse;
 import org.openstack4j.model.identity.v3.Role;
@@ -14,9 +9,15 @@ import org.openstack4j.openstack.identity.v3.domain.KeystoneRole.Roles;
 import org.openstack4j.openstack.identity.v3.domain.KeystoneRoleAssignment.RoleAssignments;
 import org.openstack4j.openstack.internal.BaseOpenStackService;
 
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.openstack4j.core.transport.ClientConstants.PATH_PROJECTS;
+import static org.openstack4j.core.transport.ClientConstants.PATH_ROLES;
+
 /**
  * Identity Role based Operations Implementation
- *
  */
 public class RoleServiceImpl extends BaseOpenStackService implements RoleService {
 
@@ -28,7 +29,7 @@ public class RoleServiceImpl extends BaseOpenStackService implements RoleService
         checkNotNull(userId);
         checkNotNull(projectId);
         checkNotNull(roleId);
-        return put(ActionResponse.class, uri("projects/%s/users/%s/roles/%s", projectId, userId, roleId)).execute();
+        return put(ActionResponse.class, uri(PATH_PROJECTS + "/%s/users/%s/roles/%s", projectId, userId, roleId)).execute();
     }
 
     /**
@@ -39,7 +40,7 @@ public class RoleServiceImpl extends BaseOpenStackService implements RoleService
         checkNotNull(userId);
         checkNotNull(projectId);
         checkNotNull(roleId);
-        return deleteWithResponse(uri("projects/%s/users/%s/roles/%s", projectId, userId, roleId)).execute();
+        return deleteWithResponse(uri(PATH_PROJECTS + "/%s/users/%s/roles/%s", projectId, userId, roleId)).execute();
     }
 
     /**
@@ -50,7 +51,7 @@ public class RoleServiceImpl extends BaseOpenStackService implements RoleService
         checkNotNull(projectId);
         checkNotNull(userId);
         checkNotNull(roleId);
-        return head(ActionResponse.class, uri("/projects/%s/users/%s/roles/%s", projectId, userId, roleId)).execute();
+        return head(ActionResponse.class, uri(PATH_PROJECTS + "/%s/users/%s/roles/%s", projectId, userId, roleId)).execute();
     }
 
     /**
@@ -94,13 +95,18 @@ public class RoleServiceImpl extends BaseOpenStackService implements RoleService
         return get(Roles.class, uri("/roles")).execute().getList();
     }
 
+    public List<? extends Role> list(Map<String, String> filterMap) {
+        Invocation<Roles> imageInvocation = buildInvocation(filterMap);
+        return imageInvocation.execute().getList();
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public List<? extends Role> getByName(String name) {
         checkNotNull(name);
-        return get(Roles.class, "/roles").param("name", name).execute().getList();
+        return get(Roles.class, PATH_ROLES).param("name", name).execute().getList();
 
     }
 
@@ -191,4 +197,16 @@ public class RoleServiceImpl extends BaseOpenStackService implements RoleService
         return head(ActionResponse.class, uri("/domains/%s/groups/%s/roles/%s", domainId, groupId, roleId)).execute();
     }
 
+    private Invocation<Roles> buildInvocation(Map<String, String> filteringParams) {
+        Invocation<Roles> imageInvocation = get(Roles.class, uri("/roles"));
+        if (filteringParams == null) {
+            return imageInvocation;
+        }
+        if (filteringParams != null) {
+            for (Map.Entry<String, String> entry : filteringParams.entrySet()) {
+                imageInvocation = imageInvocation.param(entry.getKey(), entry.getValue());
+            }
+        }
+        return imageInvocation;
+    }
 }

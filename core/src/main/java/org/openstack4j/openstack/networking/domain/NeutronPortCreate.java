@@ -3,7 +3,6 @@ package org.openstack4j.openstack.networking.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
 import org.openstack4j.model.ModelEntity;
 import org.openstack4j.model.network.Port;
 import org.openstack4j.openstack.common.ListEntity;
@@ -41,12 +40,6 @@ public class NeutronPortCreate implements ModelEntity {
 
 	@JsonProperty("tenant_id")
 	private String tenantId;
-
-	@JsonProperty("device_id")
-	private String deviceId;
-
-	@JsonProperty("device_owner")
-	private String deviceOwner;
 
 	@JsonProperty("security_groups")
 	private List<String> securityGroups;
@@ -87,8 +80,6 @@ public class NeutronPortCreate implements ModelEntity {
 		c.adminStateUp = port.isAdminStateUp();
 		c.macAddress = port.getMacAddress();
 		c.tenantId = port.getTenantId();
-		c.deviceId = port.getDeviceId();
-		c.deviceOwner = port.getDeviceOwner();
 		c.securityGroups = port.getSecurityGroups();
 		c.fixedIps = (Set<NeutronIP>) port.getFixedIps();
 		c.portSecurityEnabled=port.isPortSecurityEnabled();
