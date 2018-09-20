@@ -110,7 +110,12 @@ public final class HttpCommand<R> {
                 body = RequestBody.create(MediaType.parse(request.getContentType()), content);
             } else {
                 String content = ObjectMapperSingleton.getContext(request.getEntity().getClass()).writer().writeValueAsString(request.getEntity());
-                body = RequestBody.create(MediaType.parse(request.getContentType()), content);
+                if(request.getHeaders().get(ClientConstants.HEADER_CONTENT_TYPE) != null){
+                	body = RequestBody.create(MediaType.parse(request.getHeaders().get(ClientConstants.HEADER_CONTENT_TYPE) + ""), content);
+                } else {
+                	body = RequestBody.create(MediaType.parse(request.getContentType()), content);
+                }
+                LOG.debug("request content--{}" , content);
             }
         }
         else if(request.hasJson()) {
