@@ -28,6 +28,8 @@ public class CinderBlockQuotaSet implements BlockQuotaSet {
     private int volumes;
     @JsonProperty
     private int gigabytes;
+    @JsonProperty("backup_gigabytes")
+    private int backupGigabytes;
     
     public static BlockQuotaSetBuilder builder() {
         return new BlockQuotaSetConcreteBuilder();
@@ -56,6 +58,10 @@ public class CinderBlockQuotaSet implements BlockQuotaSet {
     @Override
     public int getGigabytes() {
         return gigabytes;
+    }
+    
+    public int getBackupGigabytes(){
+    	return backupGigabytes;
     }
     
     @Override
@@ -101,6 +107,12 @@ public class CinderBlockQuotaSet implements BlockQuotaSet {
         @Override
         public BlockQuotaSetBuilder gigabytes(int gigabytes) {
             model.gigabytes = gigabytes;
+            return this;
+        }
+        
+        @Override
+        public BlockQuotaSetBuilder backupGigabytes(int backupGigabytes) {
+            model.backupGigabytes = backupGigabytes;
             return this;
         }
         

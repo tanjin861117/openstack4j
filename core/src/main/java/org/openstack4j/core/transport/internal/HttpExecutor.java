@@ -50,6 +50,7 @@ public class HttpExecutor {
         LOG.debug("Executing Request getQueryParams: {}", request.getQueryParams());
         LOG.debug("Executing Request getHeaders: {}", request.getHeaders());
         LOG.debug("Executing Request getEntity: {}", (request.getEntity()));
+        LOG.debug("execute method:{}" , request.getMethod().name());
         return this.service().execute(request);
     }
 }

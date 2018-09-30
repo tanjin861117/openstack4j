@@ -92,7 +92,7 @@ public class RoleServiceImpl extends BaseOpenStackService implements RoleService
      */
     @Override
     public List<? extends Role> list() {
-        return get(Roles.class, uri("/roles")).execute().getList();
+        return get(Roles.class, uri(PATH_ROLES)).execute().getList();
     }
 
     public List<? extends Role> list(Map<String, String> filterMap) {

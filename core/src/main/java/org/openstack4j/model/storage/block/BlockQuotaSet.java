@@ -33,4 +33,6 @@ public interface BlockQuotaSet extends ModelEntity, Buildable<BlockQuotaSetBuild
      * @return the gigabytes
      */
     int getGigabytes();
+    
+    int getBackupGigabytes();
 }
