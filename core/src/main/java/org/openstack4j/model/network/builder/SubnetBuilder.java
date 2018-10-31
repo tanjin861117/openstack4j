@@ -97,4 +97,6 @@ public interface SubnetBuilder extends Builder<SubnetBuilder, Subnet> {
      * @see Subnet#getIpv6RaMode()
      */
 	SubnetBuilder ipv6RaMode(Ipv6RaMode ipv6RaMode);
+	
+	SubnetBuilder description(String description);
 }
