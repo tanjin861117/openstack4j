@@ -36,7 +36,8 @@ public class NovaBlockDeviceMappingCreate implements BlockDeviceMappingCreate {
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("device_type")
     public String deviceType;
-
+    @JsonProperty("volume_type")
+    public String volumeType;
 	public static NovaBlockDeviceMappingBuilder builder() {
 		return new NovaBlockDeviceMappingBuilder(new NovaBlockDeviceMappingCreate());
 	}
@@ -118,6 +119,12 @@ public class NovaBlockDeviceMappingCreate implements BlockDeviceMappingCreate {
         @Override
         public BlockDeviceMappingBuilder deviceType(String deviceType) {
             create.deviceType = deviceType;
+            return this;
+        }
+        
+        @Override
+        public BlockDeviceMappingBuilder volumeType(String volumeType) {
+            create.volumeType = volumeType;
             return this;
         }
 

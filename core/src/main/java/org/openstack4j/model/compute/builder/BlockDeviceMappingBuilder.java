@@ -109,4 +109,5 @@ public interface BlockDeviceMappingBuilder extends Buildable.Builder<BlockDevice
      */
     BlockDeviceMappingBuilder deviceType(String deviceType);
 
+    BlockDeviceMappingBuilder volumeType(String volumeType);
 }
