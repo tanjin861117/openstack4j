@@ -25,6 +25,7 @@ public class CinderVolumeType implements VolumeType {
 
 	private String id;
 	private String name;
+	private String description;
 	
 	@JsonProperty("extra_specs")
 	private Map<String, String> extraSpecs;
@@ -43,6 +44,11 @@ public class CinderVolumeType implements VolumeType {
 	@Override
 	public String getName() {
 		return name;
+	}
+	
+	@Override
+	public String getDescription() {
+		return description;
 	}
 
 	/**
@@ -115,6 +121,12 @@ public class CinderVolumeType implements VolumeType {
         @Override
         public VolumeTypeBuilder name(String name) {
             m.name = name;
+            return this;
+        }
+        
+        @Override
+        public VolumeTypeBuilder description(String description) {
+            m.description = description;
             return this;
         }
 

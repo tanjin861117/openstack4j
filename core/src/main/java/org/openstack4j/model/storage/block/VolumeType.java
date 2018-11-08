@@ -30,5 +30,7 @@ public interface VolumeType extends ModelEntity, Buildable<VolumeTypeBuilder> {
 	 */
 	Map<String, String> getExtraSpecs();
 	
+	String getDescription();
+	
 	
 }

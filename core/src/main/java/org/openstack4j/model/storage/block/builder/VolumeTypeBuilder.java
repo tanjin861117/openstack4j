@@ -14,6 +14,8 @@ public interface VolumeTypeBuilder extends Builder<VolumeTypeBuilder, VolumeType
 	 * @return VolumeTypeBuilder
 	 */
 	VolumeTypeBuilder name(String name);
+	
+	VolumeTypeBuilder description(String Description);
 
 	/**
 	 * See {@link VolumeType#getExtraSpecs()} <b>Optional</b>
