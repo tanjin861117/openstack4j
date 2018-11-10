@@ -8,6 +8,7 @@ import org.openstack4j.api.networking.ext.NetQuotaService;
 import org.openstack4j.model.common.ActionResponse;
 import org.openstack4j.model.network.NetQuota;
 import org.openstack4j.openstack.networking.domain.NeutronNetQuota;
+import org.openstack4j.openstack.networking.domain.NeutronNetQuotaUsage;
 import org.openstack4j.openstack.networking.domain.NeutronNetQuota.NeutronNetQuotas;
 import org.openstack4j.openstack.networking.internal.BaseNetworkingServices;
 
@@ -27,6 +28,11 @@ public class NetQuotaServiceImpl extends BaseNetworkingServices implements NetQu
     public NetQuota get(String tenantId) {
         checkNotNull(tenantId, "TenantId must not be null");
         return get(NeutronNetQuota.class, uri("/quotas/%s", tenantId)).execute();
+    }
+    
+    public NeutronNetQuotaUsage usage(String tenantId){
+    	checkNotNull(tenantId, "TenantId must not be null");
+    	return get(NeutronNetQuotaUsage.class, uri("/quotas/%s/details.json", tenantId)).execute();
     }
     
     @Override

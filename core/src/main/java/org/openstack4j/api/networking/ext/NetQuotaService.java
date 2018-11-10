@@ -6,6 +6,7 @@ import org.openstack4j.common.RestService;
 import org.openstack4j.model.common.ActionResponse;
 import org.openstack4j.model.network.NetQuota;
 import org.openstack4j.model.network.builder.NetQuotaBuilder;
+import org.openstack4j.openstack.networking.domain.NeutronNetQuotaUsage;
 
 /**
  * Networking (Neutron) Quota Extension API
@@ -28,6 +29,8 @@ public interface NetQuotaService extends RestService {
      * @return the tenants quota
      */
     NetQuota get(String tenantId);
+    
+    NeutronNetQuotaUsage usage(String tenantId);
     
     /**
      * Updates the network quotas for the current tenant
