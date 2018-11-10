@@ -12,79 +12,79 @@ public class NeutronNetQuotaUsage implements ModelEntity {
     private static final long serialVersionUID = 1L;
     
     @JsonProperty("subnet")
-	private Map<String, Object> subnet;
+	private Map<String, Integer> subnet;
     
     @JsonProperty("network")
-	private Map<String, Object> network;
+	private Map<String, Integer> network;
     
     @JsonProperty("floatingip")
-	private Map<String, Object> floatingIp;
+	private Map<String, Integer> floatingIp;
     
     @JsonProperty("security_group_rule")
-	private Map<String, Object> securityGroupRule;
+	private Map<String, Integer> securityGroupRule;
     
     @JsonProperty("security_group")
-	private Map<String, Object> securityGroup;
+	private Map<String, Integer> securityGroup;
     
     @JsonProperty("router")
-	private Map<String, Object> router;
+	private Map<String, Integer> router;
     
     @JsonProperty("port")
-	private Map<String, Object> port;
+	private Map<String, Integer> port;
 
-	public Map<String, Object> getSubnet() {
+	public Map<String, Integer> getSubnet() {
 		return subnet;
 	}
 
-	public void setSubnet(Map<String, Object> subnet) {
+	public void setSubnet(Map<String, Integer> subnet) {
 		this.subnet = subnet;
 	}
 
-	public Map<String, Object> getNetwork() {
+	public Map<String, Integer> getNetwork() {
 		return network;
 	}
 
-	public void setNetwork(Map<String, Object> network) {
+	public void setNetwork(Map<String, Integer> network) {
 		this.network = network;
 	}
 
-	public Map<String, Object> getFloatingIp() {
+	public Map<String, Integer> getFloatingIp() {
 		return floatingIp;
 	}
 
-	public void setFloatingIp(Map<String, Object> floatingIp) {
+	public void setFloatingIp(Map<String, Integer> floatingIp) {
 		this.floatingIp = floatingIp;
 	}
 
-	public Map<String, Object> getSecurityGroupRule() {
+	public Map<String, Integer> getSecurityGroupRule() {
 		return securityGroupRule;
 	}
 
-	public void setSecurityGroupRule(Map<String, Object> securityGroupRule) {
+	public void setSecurityGroupRule(Map<String, Integer> securityGroupRule) {
 		this.securityGroupRule = securityGroupRule;
 	}
 
-	public Map<String, Object> getSecurityGroup() {
+	public Map<String, Integer> getSecurityGroup() {
 		return securityGroup;
 	}
 
-	public void setSecurityGroup(Map<String, Object> securityGroup) {
+	public void setSecurityGroup(Map<String, Integer> securityGroup) {
 		this.securityGroup = securityGroup;
 	}
 
-	public Map<String, Object> getRouter() {
+	public Map<String, Integer> getRouter() {
 		return router;
 	}
 
-	public void setRouter(Map<String, Object> router) {
+	public void setRouter(Map<String, Integer> router) {
 		this.router = router;
 	}
 
-	public Map<String, Object> getPort() {
+	public Map<String, Integer> getPort() {
 		return port;
 	}
 
-	public void setPort(Map<String, Object> port) {
+	public void setPort(Map<String, Integer> port) {
 		this.port = port;
 	}
     
