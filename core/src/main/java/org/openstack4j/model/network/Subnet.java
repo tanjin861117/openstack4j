@@ -63,5 +63,7 @@ public interface Subnet extends Resource, Buildable<SubnetBuilder> {
 	/**
 	 * @return the IPv6 router advertisement specifies whether the networking service should transmit ICMPv6 packets, for a subnet
 	 */
-	Ipv6RaMode getIpv6RaMode();		
+	Ipv6RaMode getIpv6RaMode();
+	
+	String getDescription();
 }

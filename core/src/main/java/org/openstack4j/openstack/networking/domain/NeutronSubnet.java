@@ -221,6 +221,10 @@ public class NeutronSubnet implements Subnet {
 	public Ipv6RaMode getIpv6RaMode() {
 		return ipv6RaMode;
 	}
+	
+	public String getDescription(){
+		return description;
+	}
 
 	/**
 	 * {@inheritDoc}
